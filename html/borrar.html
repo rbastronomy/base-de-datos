@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Buscar Paciente</title>
+	<style>
+		body {
+			background-color: #1e8449;
+			color: white;
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		
+		h1 {
+			text-align: center;
+			margin-top: 50px;
+		}
+		
+		table {
+			width: 80%;
+			margin: 50px auto;
+			border-collapse: collapse;
+		}
+		
+		th {
+			background-color: #145a32;
+			border: 1px solid #145a32;
+			padding: 10px;
+			text-align: center;
+		}
+		
+		td {
+			border: 1px solid #145a32;
+			padding: 10px;
+			text-align: center;
+			cursor: pointer;
+		}
+		
+		td:hover {
+			background-color: #145a32;
+			color: #1e8449;
+		}
+		
+		a {
+			display: block;
+			text-align: center;
+			margin-top: 20px;
+			color: white;
+			text-decoration: none;
+			font-weight: bold;
+			font-size: 18px;
+		}
+        
+        .delete-btn {
+            background-color: #c0392b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .delete-btn:hover {
+            background-color: #e74c3c;
+        }
+        
+        #delete-column {
+            float: right;
+            background-color: #c0392b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        #delete-column:hover {
+            background-color: #e74c3c;
+        }
+        
+	</style>
+</head>
+<body>
+	<h1>Borrar Pacientes</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Rut</th>
+				<th>Nombre Completo</th>
+				<th>Correo Electrónico</th>
+				<th>Género</th>
+				<th>Fecha de Entrada</th>
+				<th>Fecha de Salida</th>
+				<th>Funcionario de Salud</th>
+				<th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>20.965.928-k</td>
+				<td>Renato Fabian Barria Diaz</td>
+				<td>renatobarria@hotmail.com</td>
+				<td>Masculino</td>
+				<td>01/03/2023</td>
+				<td>15/03/2023</td>
+				<td>Dra. Polo</td>
+				<td><button onclick="deleteColumn(7)">Borrar</button></td>
+			</tr>
+			<tr>
+				<td>20.946.710-0</td>
+				<td>Carlos Hernan Saldes Lioi</td>
+				<td>csaldes03@gmail.com</td>
+				<td>Masculino</td>
+				 <td>10/03/2023</td>
+				<td>20/03/2023</td>
+				<td>Dr. Simi</td>
+				<td><button onclick="deleteColumn(7)">Borrar</button></td>
+			</tr>
+			<tr>
+				<td>21.177.794-k</td>
+				<td>Juan Pablo Gomez Pizarro</td>
+				<td>JuanGomezpizarro2002@gmail.com</td>
+				<td>Masculino</td>
+				<td>05/03/2023</td>
+				<td>18/03/2023</td>
+				<td>Dr. Sins</td>
+				<td><button onclick="deleteColumn(7)">Borrar</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="menu.html">Regresar al Menú</a>
+</body>
+</html>

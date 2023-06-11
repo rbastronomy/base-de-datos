@@ -3,11 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Buscar Paciente</title>
+	<title>Buscar Empleado</title>
 	<style>
 		body {
-			background-color: #1e8449;
-			color: white;
+			background-image: url("21.jpg"); /* Fondo de pantalla */
+			background-size: cover;
+			color: #333;
 			font-family: Arial, sans-serif;
 			margin: 0;
 			padding: 0;
@@ -16,113 +17,231 @@
 		h1 {
 			text-align: center;
 			margin-top: 50px;
+			color: #f4f4f4;
 		}
 		
 		table {
 			width: 80%;
 			margin: 50px auto;
 			border-collapse: collapse;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			background-color: #FFF;
 		}
 		
 		th {
-			background-color: #145a32;
-			border: 1px solid #145a32;
+			background-color: #566fb3;
+			color: #FFF;
 			padding: 10px;
 			text-align: center;
 		}
 		
 		td {
-			border: 1px solid #145a32;
 			padding: 10px;
 			text-align: center;
 			cursor: pointer;
 		}
 		
 		td:hover {
-			background-color: #145a32;
-			color: #1e8449;
+			background-color: #566fb3;
+			color: #FFF;
 		}
 		
-		a {
-			display: block;
-			text-align: center;
+		.back-button {
+			display: inline-block;
 			margin-top: 20px;
-			color: white;
-			text-decoration: none;
+			padding: 10px 20px;
+			background-color: #566fb3;
+			color: #FFF;
 			font-weight: bold;
 			font-size: 18px;
-		}
-
-		input[type=text] {
-			width: 100%;
-			box-sizing: border-box;
-			padding: 5px;
+			border-radius: 5px;
+			text-decoration: none;
 			border: none;
-			border-radius: 3px;
-			background-color: #f1f1f1;
-			color: black;
-			font-size: 14px;
-		}
-
-		.button {
-			background-color: #145a32;
-			color: white;
-			padding: 10px 20px;
-			border: none;
-			border-radius: 3px;
 			cursor: pointer;
-			font-size: 14px;
+			transform: translateY(0);
+			transition: transform 0.3s ease-in-out;
+		}
+		
+		.back-button:hover {
+			transform: translateY(-5px);
 		}
 
-		.button:hover {
-			background-color: #1e8449;
+		.search-bar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 80%;
+			margin: 20px auto;
+			text-align: center;
+		}
+
+		.search-input {
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			font-size: 16px;
+			width: 80%;
+			box-sizing: border-box;
+		}
+
+		.employee-details {
+			width: 80%;
+			margin: 20px auto;
+			background-color: #FFF;
+			padding: 20px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.employee-details h2 {
+			margin-bottom: 10px;
+			color: #566fb3;
+		}
+
+		.employee-details ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.employee-details li {
+			margin-bottom: 5px;
+			font-size: 16px;
+		}
+
+		.employee-details li span {
+			font-weight: bold;
+			margin-right: 5px;
 		}
 	</style>
 </head>
 <body>
-	<h1>Modificar Pacientes</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Rut</th>
-      <th>Nombre Completo</th>
-      <th>Correo Electrónico</th>
-      <th>Género</th>
-      <th>Fecha de Entrada</th>
-      <th>Fecha de Salida</th>
-      <th>Funcionario de Salud</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td contenteditable="true">20.965.928-k</td>
-      <td contenteditable="true">Renato Fabian Barria Diaz</td>
-      <td contenteditable="true">renatobarria@hotmail.com</td>
-      <td contenteditable="true">Masculino</td>
-      <td contenteditable="true">01/03/2023</td>
-      <td contenteditable="true">15/03/2023</td>
-      <td contenteditable="true">Dra. Polo</td>
-    </tr>
-    <tr>
-      <td contenteditable="true">20.946.710-0</td>
-      <td contenteditable="true">Carlos Hernan Saldes Lioi</td>
-      <td contenteditable="true">csaldes03@gmail.com</td>
-      <td contenteditable="true">Masculino</td>
-      <td contenteditable="true">10/03/2023</td>
-      <td contenteditable="true">20/03/2023</td>
-      <td contenteditable="true">Dr. Simi</td>
-    </tr>
-    <tr>
-      <td contenteditable="true">21.177.794-k</td>
-      <td contenteditable="true">Juan Pablo Gomez Pizarro</td>
-      <td contenteditable="true">JuanGomezpizarro2002@gmail.com</td>
-      <td contenteditable="true">Masculino</td>
-      <td contenteditable="true">05/03/2023</td>
-      <td contenteditable="true">18/03/2023</td>
-      <td contenteditable="true">Dr. Sins</td>
-    </tr>
-  </tbody>
-</table>
-<a href="menu.html">Regresar al Menú</a>
+	<h1>Buscar Empleado</h1>
+
+	<div class="search-bar">
+		<input type="text" id="searchInput" class="search-input" placeholder="Buscar empleado..." />
+		<a href="menu.html" class="back-button">Regresar al Menú</a>
+	</div>
+
+	<table id="employeeTable">
+		<thead>
+			<tr>
+				<th>Rut</th>
+				<th>Nombre Completo</th>
+				<th>Correo Electrónico</th>
+				<th>Género</th>
+				<th>Fecha de Entrada</th>
+				<th>Fecha de Salida</th>
+				<th>Funcionario de Salud</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td contenteditable="true">20.965.928-k</td>
+				<td contenteditable="true">Renato Fabian Barria Diaz</td>
+				<td contenteditable="true">renatobarria@hotmail.com</td>
+				<td contenteditable="true">Masculino</td>
+				<td contenteditable="true">01/03/2023</td>
+				<td contenteditable="true">15/03/2023</td>
+				<td contenteditable="true">Dra. Polo</td>
+			</tr>
+			<tr>
+				<td contenteditable="true">20.946.710-0</td>
+				<td contenteditable="true">Carlos Hernan Saldes Lioi</td>
+				<td contenteditable="true">csaldes03@gmail.com</td>
+				<td contenteditable="true">Masculino</td>
+				<td contenteditable="true">10/03/2023</td>
+				<td contenteditable="true">20/03/2023</td>
+				<td contenteditable="true">Dr. Simi</td>
+			</tr>
+			<tr>
+				<td contenteditable="true">21.177.794-k</td>
+				<td contenteditable="true">Juan Pablo Gomez Pizarro</td>
+				<td contenteditable="true">JuanGomezpizarro2002@gmail.com</td>
+				<td contenteditable="true">Masculino</td>
+				<td contenteditable="true">05/03/2023</td>
+				<td contenteditable="true">18/03/2023</td>
+				<td contenteditable="true">Dr. Sins</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="employee-details">
+		<h2>Datos del empleado seleccionado:</h2>
+		<ul id="employeeDetailsList">
+		</ul>
+	</div>
+
+	<script>
+		// Función para filtrar los empleados según el valor de búsqueda
+		function filterEmployees() {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById("searchInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("employeeTable");
+			tr = table.getElementsByTagName("tr");
+			
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1]; // Columna del nombre completo
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+
+		// Evento para detectar cambios en el campo de búsqueda
+		document.getElementById("searchInput").addEventListener("input", filterEmployees);
+
+		// Función para habilitar la edición de los datos al hacer clic en una celda
+		function enableEdit(element) {
+			element.contentEditable = true;
+			element.focus();
+		}
+
+		// Función para deshabilitar la edición de los datos al perder el foco de una celda
+		function disableEdit(element) {
+			element.contentEditable = false;
+		}
+
+		// Función para mostrar los datos del empleado seleccionado
+		function showEmployeeDetails(row) {
+			var detailsList = document.getElementById("employeeDetailsList");
+			detailsList.innerHTML = ""; // Limpiar la lista de detalles
+
+			var cells = row.getElementsByTagName("td");
+			var labels = ["Rut", "Nombre Completo", "Correo Electrónico", "Género", "Fecha de Entrada", "Fecha de Salida", "Funcionario de Salud"];
+			for (var i = 0; i < cells.length; i++) {
+				var detail = document.createElement("li");
+				detail.innerHTML = "<span>" + labels[i] + ":</span> " + cells[i].textContent;
+				detailsList.appendChild(detail);
+			}
+		}
+
+		// Obtener todas las celdas editables de la tabla
+		var cells = document.querySelectorAll("#employeeTable td[contenteditable='true']");
+
+		// Agregar eventos a las celdas para habilitar/deshabilitar la edición
+		cells.forEach(function(cell) {
+			cell.addEventListener("click", function() {
+				enableEdit(this);
+			});
+
+			cell.addEventListener("blur", function() {
+				disableEdit(this);
+			});
+		});
+
+		// Agregar eventos a las filas para mostrar los detalles del empleado seleccionado
+		var rows = document.querySelectorAll("#employeeTable tbody tr");
+		rows.forEach(function(row) {
+			row.addEventListener("click", function() {
+				showEmployeeDetails(this);
+			});
+		});
+	</script>
 </body>
 </html>

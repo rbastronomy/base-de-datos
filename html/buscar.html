@@ -3,11 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Buscar Paciente</title>
+	<title>Buscar Empleado</title>
 	<style>
 		body {
-			background-color: #1e8449;
-			color: white;
+			background-image: url("2.jpg"); /* Fondo de pantalla */
+			background-size: cover;
+			backdrop-filter: blur(10px);
+			color: #333;
 			font-family: Arial, sans-serif;
 			margin: 0;
 			padding: 0;
@@ -16,47 +18,83 @@
 		h1 {
 			text-align: center;
 			margin-top: 50px;
+			color: #566fb3;
 		}
 		
 		table {
 			width: 80%;
 			margin: 50px auto;
 			border-collapse: collapse;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			background-color: #FFF;
 		}
 		
 		th {
-			background-color: #145a32;
-			border: 1px solid #145a32;
+			background-color: #566fb3;
+			color: #FFF;
 			padding: 10px;
 			text-align: center;
 		}
 		
 		td {
-			border: 1px solid #145a32;
 			padding: 10px;
 			text-align: center;
 			cursor: pointer;
 		}
 		
 		td:hover {
-			background-color: #145a32;
-			color: #1e8449;
+			background-color: #ffffff;
+			color: #FFF;
 		}
 		
-		a {
-			display: block;
-			text-align: center;
+		.back-button {
+			display: inline-block;
 			margin-top: 20px;
-			color: white;
-			text-decoration: none;
+			padding: 10px 20px;
+			background-color: #566fb3;
+			color: #FFF;
 			font-weight: bold;
 			font-size: 18px;
+			border-radius: 5px;
+			text-decoration: none;
+			border: none;
+			cursor: pointer;
+			transform: translateY(0);
+			transition: transform 0.3s ease-in-out;
+		}
+		
+		.back-button:hover {
+			transform: translateY(-5px);
+		}
+
+		.search-bar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 80%;
+			margin: 20px auto;
+			text-align: center;
+		}
+
+		.search-input {
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			font-size: 16px;
+			width: 80%;
+			box-sizing: border-box;
 		}
 	</style>
 </head>
 <body>
-	<h1>Lista de Pacientes</h1>
-	<table>
+	<h1>Buscar Empleado</h1>
+
+	<div class="search-bar">
+		<input type="text" id="searchInput" class="search-input" placeholder="Buscar empleado..." />
+		<a href="menu.html" class="back-button">Regresar al Menú</a>
+	</div>
+
+	<table id="employeeTable">
 		<thead>
 			<tr>
 				<th>Rut</th>
@@ -98,6 +136,31 @@
 			</tr>
 		</tbody>
 	</table>
-	<a href="menu.html">Regresar al Menú</a>
+
+	<script>
+		// Función para filtrar los empleados según el valor de búsqueda
+		function filterEmployees() {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById("searchInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("employeeTable");
+			tr = table.getElementsByTagName("tr");
+			
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1]; // Columna del nombre completo
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+
+		// Evento para detectar cambios en el campo de búsqueda
+		document.getElementById("searchInput").addEventListener("input", filterEmployees);
+	</script>
 </body>
 </html>

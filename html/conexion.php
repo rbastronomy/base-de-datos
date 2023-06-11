@@ -1,35 +1,38 @@
 <?php
+$server = "magallanes.inf.unap.cl";
+$username = "jgomez";
+$password = "262m79VhrgMj";
+$database = "jgomez";
 
-// datos de conexión a la base de datos
-$servername = "localhost";
-$username = "root";
-$password = " ";
-$dbname = "usuarios";
+// Establecer la conexión
+$connection = mysqli_connect($server, $username, $password, $database);
 
-// crear la conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// verificar la conexión
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Verificar la conexión
+if (!$conn) {
+    die("Error al conectar a la base de datos: " . mysqli_connect_error());
 }
 
-// definir la consulta SQL para crear la tabla de usuarios
-$sql = "CREATE TABLE usuarios (
-        id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        nombre VARCHAR(30) NOT NULL,
-        correo VARCHAR(50) NOT NULL,
-        contraseña VARCHAR(30) NOT NULL
-    )";
+// Si la conexión es exitosa, puedes ejecutar consultas y realizar operaciones en la base de datos
 
-// ejecutar la consulta SQL
-if ($conn->query($sql) === TRUE) {
-    echo "Tabla creada exitosamente";
+// Ejemplo de consulta
+$query = "SELECT * FROM tabla";
+$result = mysqli_query($conn, $query);
+
+// Procesar el resultado de la consulta
+if (mysqli_num_rows($result) > 0) {
+    // Obtener los datos de cada fila
+    while ($row = mysqli_fetch_assoc($result)) {
+        // Acceder a los valores de cada columna
+        $column1 = $row["columna1"];
+        $column2 = $row["columna2"];
+        
+        // Realizar las operaciones necesarias con los datos obtenidos
+        // ...
+    }
 } else {
-    echo "Error al crear la tabla: " . $conn->error;
+    echo "No se encontraron resultados";
 }
 
-// cerrar la conexión
-$conn->close();
-
+// Cerrar la conexión
+mysqli_close($conn);
 ?>

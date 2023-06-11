@@ -3,11 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Buscar Paciente</title>
+	<title>Buscar Empleado</title>
 	<style>
 		body {
-			background-color: #1e8449;
-			color: white;
+			background-image: url("10.jpg"); /* Fondo de pantalla */
+			background-size: cover;
+			color: #333;
 			font-family: Arial, sans-serif;
 			margin: 0;
 			padding: 0;
@@ -16,76 +17,190 @@
 		h1 {
 			text-align: center;
 			margin-top: 50px;
+			color: #566fb3;
 		}
 		
 		table {
 			width: 80%;
 			margin: 50px auto;
 			border-collapse: collapse;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			background-color: #FFF;
 		}
 		
 		th {
-			background-color: #145a32;
-			border: 1px solid #145a32;
+			background-color: #566fb3;
+			color: #FFF;
 			padding: 10px;
 			text-align: center;
 		}
 		
 		td {
-			border: 1px solid #145a32;
 			padding: 10px;
 			text-align: center;
 			cursor: pointer;
 		}
 		
 		td:hover {
-			background-color: #145a32;
-			color: #1e8449;
+			background-color: #566fb3;
+			color: #FFF;
 		}
 		
-		a {
-			display: block;
-			text-align: center;
+		.back-button {
+			display: inline-block;
 			margin-top: 20px;
-			color: white;
-			text-decoration: none;
+			padding: 10px 20px;
+			background-color: #566fb3;
+			color: #FFF;
 			font-weight: bold;
 			font-size: 18px;
+			border-radius: 5px;
+			text-decoration: none;
+			border: none;
+			cursor: pointer;
+			transform: translateY(0);
+			transition: transform 0.3s ease-in-out;
 		}
-        
-        .delete-btn {
-            background-color: #c0392b;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .delete-btn:hover {
-            background-color: #e74c3c;
-        }
-        
-        #delete-column {
-            float: right;
-            background-color: #c0392b;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        
-        #delete-column:hover {
-            background-color: #e74c3c;
-        }
-        
+		
+		.back-button:hover {
+			transform: translateY(-5px);
+		}
+
+		.search-bar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 80%;
+			margin: 20px auto;
+			text-align: center;
+		}
+
+		.search-input {
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			font-size: 16px;
+			width: 80%;
+			box-sizing: border-box;
+		}
+
+		.popup {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: rgba(255, 255, 255, 0.9);
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+			z-index: 9999;
+			display: none;
+		}
+
+		.popup-message {
+			text-align: center;
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
+
+		.popup-buttons {
+			display: flex;
+			justify-content: center;
+			margin-top: 20px;
+		}
+
+		.popup-button {
+			padding: 10px 20px;
+			margin: 0 10px;
+			background-color: #566fb3;
+			color: #FFF;
+			font-weight: bold;
+			border-radius: 5px;
+			border: none;
+			cursor: pointer;
+		}
+
+		.popup-button.cancel-button {
+			background-color: #FF4136;
+		}
+
+		.delete-warning {
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		.delete-warning:hover .delete-text {
+			animation: pulse 0.5s infinite alternate;
+		}
+
+		.delete-warning:active .delete-text {
+			animation: none;
+		}
+
+		.delete-text {
+			position: absolute;
+			background-color: #FF4136;
+			color: #FFF;
+			font-weight: bold;
+			padding: 5px 10px;
+			border-radius: 5px;
+			top: -25px;
+			left: -20px;
+			opacity: 0;
+			visibility: hidden;
+			transform: translateX(-10px);
+			transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, transform 0.3s ease-in-out;
+		}
+
+		@keyframes pulse {
+			0% {
+				transform: translateX(-10px);
+				opacity: 0;
+				visibility: hidden;
+			}
+			50% {
+				transform: translateX(0);
+				opacity: 1;
+				visibility: visible;
+			}
+			100% {
+				transform: translateX(-10px);
+				opacity: 0;
+				visibility: hidden;
+			}
+		}
+
+		.trash-icon {
+			display: inline-block;
+			position: relative;
+			width: 24px;
+			height: 24px;
+			background-image: url("trash-icon.png");
+			background-size: cover;
+			cursor: pointer;
+			transition: transform 0.3s ease-in-out;
+		}
+
+		.trash-icon:hover {
+			transform: scale(1.2);
+		}
+
+		.trash-icon:active {
+			transform: scale(1);
+		}
 	</style>
+	
 </head>
 <body>
-	<h1>Borrar Pacientes</h1>
-	<table>
+	<h1>Buscar Empleado</h1>
+
+	<div class="search-bar">
+		<input type="text" id="searchInput" class="search-input" placeholder="Buscar empleado..." />
+		<a href="menu.html" class="back-button">Regresar al Menú</a>
+	</div>
+
+	<table id="employeeTable">
 		<thead>
 			<tr>
 				<th>Rut</th>
@@ -101,36 +216,106 @@
 		<tbody>
 			<tr>
 				<td>20.965.928-k</td>
-				<td>Renato Fabian Barria Diaz</td>
+				<td class="delete-warning"><span class="delete-text">Borrar tabla</span>Renato Fabian Barria Diaz</td>
 				<td>renatobarria@hotmail.com</td>
 				<td>Masculino</td>
 				<td>01/03/2023</td>
 				<td>15/03/2023</td>
 				<td>Dra. Polo</td>
-				<td><button onclick="deleteColumn(7)">Borrar</button></td>
+				<td><div class="trash-icon"></div></td>
 			</tr>
 			<tr>
 				<td>20.946.710-0</td>
-				<td>Carlos Hernan Saldes Lioi</td>
+				<td class="delete-warning"><span class="delete-text">Borrar tabla</span>Carlos Hernan Saldes Lioi</td>
 				<td>csaldes03@gmail.com</td>
 				<td>Masculino</td>
-				 <td>10/03/2023</td>
+				<td>10/03/2023</td>
 				<td>20/03/2023</td>
 				<td>Dr. Simi</td>
-				<td><button onclick="deleteColumn(7)">Borrar</button></td>
+				<td><div class="trash-icon"></div></td>
 			</tr>
 			<tr>
 				<td>21.177.794-k</td>
-				<td>Juan Pablo Gomez Pizarro</td>
+				<td class="delete-warning"><span class="delete-text">Borrar tabla</span>Juan Pablo Gomez Pizarro</td>
 				<td>JuanGomezpizarro2002@gmail.com</td>
 				<td>Masculino</td>
 				<td>05/03/2023</td>
 				<td>18/03/2023</td>
 				<td>Dr. Sins</td>
-				<td><button onclick="deleteColumn(7)">Borrar</button></td>
+				<td><div class="trash-icon"></div></td>
 			</tr>
 		</tbody>
 	</table>
-	<a href="menu.html">Regresar al Menú</a>
+
+	<div id="popup" class="popup">
+		<p class="popup-message"></p>
+		<button class="popup-button" id="acceptButton">Aceptar</button>
+		<button class="popup-button" id="cancelButton">Cancelar</button>
+	</div>
+
+	<script>
+		// Función para filtrar los empleados según el valor de búsqueda
+		function filterEmployees() {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById("searchInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("employeeTable");
+			tr = table.getElementsByTagName("tr");
+			
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1]; // Columna del nombre completo
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+
+		// Evento para detectar cambios en el campo de búsqueda
+		document.getElementById("searchInput").addEventListener("input", filterEmployees);
+
+		// Función para mostrar el mensaje emergente y borrar una fila de la tabla
+		function deleteTableRow(row) {
+			var popup = document.getElementById("popup");
+			var message = document.querySelector(".popup-message");
+			var acceptButton = document.getElementById("acceptButton");
+			var cancelButton = document.getElementById("cancelButton");
+
+			// Mostrar el mensaje emergente
+			popup.style.display = "block";
+			message.textContent = "¿Estás seguro de que deseas borrar la tabla?";
+
+			// Mostrar confirmación antes de borrar la tabla
+			acceptButton.addEventListener("click", function() {
+				row.style.opacity = "0";
+				row.style.transition = "opacity 0.5s ease-in-out";
+
+				setTimeout(function() {
+					row.parentNode.removeChild(row);
+					popup.style.display = "none"; // Ocultar el mensaje emergente después de borrar la tabla
+				}, 500);
+			});
+
+			// Ocultar el mensaje emergente al hacer clic en el botón de cancelar
+			cancelButton.addEventListener("click", function() {
+				popup.style.display = "none";
+			});
+		}
+
+		// Evento para detectar clic en una celda de la tabla
+		document.getElementById("employeeTable").addEventListener("click", function(event) {
+			var target = event.target;
+
+			// Verificar si se hizo clic en el icono de la papelera
+			if (target.classList.contains("trash-icon")) {
+				var row = target.parentNode.parentNode;
+				deleteTableRow(row);
+			}
+		});
+	</script>
 </body>
 </html>

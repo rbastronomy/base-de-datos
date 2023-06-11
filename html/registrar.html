@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Registrar Paciente</title>
+	<title>Buscar Registros</title>
 	<style>
 		body {
-			background-color: #E6FAF5;
+			background-image: url("1.jpg");
+			background-size: cover;
 			color: #3E3E3E;
 			font-family: Arial, sans-serif;
 			font-size: 14px;
@@ -22,7 +23,7 @@
 			border-radius: 10px;
 			box-shadow: 0 0 10px rgba(0,0,0,0.3);
 		}
-		input[type=text], input[type=email], input[type=date], select {
+		input[type=text] {
 			width: 100%;
 			padding: 12px 20px;
 			margin: 8px 0;
@@ -51,56 +52,73 @@
 		button[type=submit]:hover {
 			background-color: #45a049;
 		}
-		button[type=reset] {
-			background-color: #f44336;
-			color: white;
-			padding: 14px 20px;
-			margin: 8px 0;
+		.back-button {
+			display: inline-block;
+			margin-top: 20px;
+			padding: 10px 20px;
+			background-color: #566fb3;
+			color: #FFF;
+			font-weight: bold;
+			font-size: 18px;
+			border-radius: 5px;
+			text-decoration: none;
 			border: none;
-			border-radius: 4px;
 			cursor: pointer;
-			width: 100%;
-			font-size: 14px;
 		}
-		button[type=reset]:hover {
-			background-color: #e60000;
+		.back-button:hover {
+			background-color: #344e8d;
+		}
+		.employee-list {
+			margin-top: 20px;
+		}
+		.employee-card {
+			width: 500px;
+			margin: 20px auto;
+			background-color: #FFFFFF;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.3);
+			animation: slide-up 0.5s ease-in-out;
+		}
+		@keyframes slide-up {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		.employee-card h2 {
+			text-align: center;
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
+		.employee-card p {
+			margin: 10px 0;
 		}
 	</style>
+	
 </head>
 <body>
 	<div class="container">
-		<h1>Registro de Pacientes</h1>
-		<form action="menu.html" method="post">
-			<label for="rut">Rut:</label>
-			<input type="text" id="rut" name="rut" required /><br />
+		<h1>Buscar Registros</h1>
+		<form action="buscar.html" method="get">
+			<label for="searchInput">Buscar empleado:</label>
+			<input type="text" id="searchInput" name="searchInput" required /><br />
 
-			<label for="nombre">Nombre completo:</label>
-			<input type="text" id="nombre" name="nombre" required /><br />
-
-			<label for="correo">Correo electrónico:</label>
-			<input type="email" id="correo" name="correo" required /><br />
-
-			<label for="genero">Género:</label>
-			<select id="genero" name="genero" required>
-				<option value="">Seleccione una opción</option>
-				<option value="masculino">Masculino</option>
-				<option value="femenino">Femenino</option>
-				<option value="otro">Otro</option>
-			</select><br />
-
-			<label for="fecha_entrada">Fecha de entrada:</label>
-			<input type="date" id="fecha_entrada" name="fecha_entrada" required /><br />
-
-			<label for="fecha_salida">Fecha de salida:</label>
-			<input type="date" id="fecha_salida" name="fecha_salida" required /><br />
-
-			<label for="funcionario">Funcionario de salud:</label>
-			<input type="text" id="funcionario" name="funcionario" required /><br />
-
-			<button type="submit">Guardar</button>
-			<a href="menu.html" class="cancelar">Cancelar</a>
+			<button type="submit">Buscar</button>
+			<a href="menu.html" class="back-button">Regresar al Menú</a>
 		</form>
+		<div class="employee-list">
+			<div class="employee-card">
+				<h2>Nombre del empleado</h2>
+				<p>Horas trabajadas: XX</p>
+				<p>Días asistidos: XX</p>
+				<p>Datos personales: </p>
+			</div>
+		</div>
 	</div>
 </body>
-
 </html>

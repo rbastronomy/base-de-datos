@@ -77,16 +77,16 @@
 
 <body>
   <div class="container">
-    <form action="menu.html">
+    <form action="conexion.php" method="post">
       <a href="https://www.fach.mil.cl/index.html">
         <img src="fuerza_aerea.png" alt="Fuerza Aerea" class="center">
       </a>
       <h1>Iniciar Sesión</h1>
       <div class="form-input">
-        <input type="text" name="rut" id="rut" placeholder="Rut" required>
+        <input type="text" name="email_usuario" id="email_usuario" placeholder="Rut" required>
       </div>
       <div class="form-input">
-        <input type="password" name="password" id="password" placeholder="Contraseña" required minlength="8" maxlength="12" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%+-¿'?¡\*?&])[A-Za-z\d@$!%*?&]{8,}$">
+        <input type="password" name="contrasena_usuario" id="contrasena_usuario" placeholder="Contraseña" required minlength="8" maxlength="12" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%+-¿'?¡\*?&])[A-Za-z\d@$!%*?&]{8,}$">
       </div>
       <input type="submit" value="Ingresar" class="btn-submit">
     </form>

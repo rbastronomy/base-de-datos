@@ -1,38 +1,36 @@
 <?php
-$server = "magallanes.inf.unap.cl";
-$username = "jgomez";
-$password = "262m79VhrgMj";
-$database = "jgomez";
+$host = 'magallanes.inf.unap.cl'; // Normalmente es localhost
+$port = '5432'; // Por defecto es 5432
+$dbname = 'jgomez';
+$user = 'jgomez';
+$password = '262m79VhrgMj';
 
-// Establecer la conexión
-$connection = mysqli_connect($server, $username, $password, $database);
+// Establecer conexión
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $rut = $_POST['rut'];
+    $contrasena = $_POST['password'];
 
-// Verificar la conexión
-if (!$conn) {
-    die("Error al conectar a la base de datos: " . mysqli_connect_error());
-}
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;user=$user;password=$password";
+    try {
+        $conexion = new PDO($dsn);
+        $sql = "SELECT * FROM empleado WHERE rut = :rut AND contrasena_usuario = :contrasena";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bindParam(':rut', $rut);
+        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt->execute();
 
-// Si la conexión es exitosa, puedes ejecutar consultas y realizar operaciones en la base de datos
-
-// Ejemplo de consulta
-$query = "SELECT * FROM tabla";
-$result = mysqli_query($conn, $query);
-
-// Procesar el resultado de la consulta
-if (mysqli_num_rows($result) > 0) {
-    // Obtener los datos de cada fila
-    while ($row = mysqli_fetch_assoc($result)) {
-        // Acceder a los valores de cada columna
-        $column1 = $row["columna1"];
-        $column2 = $row["columna2"];
-        
-        // Realizar las operaciones necesarias con los datos obtenidos
-        // ...
+        // Verificar si se encontró un registro
+        if ($stmt->rowCount() == 1) {
+            // Usuario y contraseña válidos, iniciar sesión o redireccionar a la página deseada
+            // ...
+            echo "Autenticación exitosa";
+        } else {
+            // Usuario o contraseña incorrectos, mostrar mensaje de error o redireccionar a la página de inicio de sesión
+            // ...
+            echo "Autenticación fallida";
+        }
+    } catch (PDOException $e) {
+        echo "Error al conectarse a la base de datos: " . $e->getMessage();
     }
-} else {
-    echo "No se encontraron resultados";
 }
-
-// Cerrar la conexión
-mysqli_close($conn);
 ?>

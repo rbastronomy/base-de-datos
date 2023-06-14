@@ -1,36 +1,40 @@
 <?php
+
 $host = 'magallanes.inf.unap.cl'; // Normalmente es localhost
 $port = '5432'; // Por defecto es 5432
 $dbname = 'jgomez';
 $user = 'jgomez';
 $password = '262m79VhrgMj';
 
-// Establecer conexión
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $rut = $_POST['rut'];
-    $contrasena = $_POST['password'];
-
+try {
+    // Establecer conexión
     $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;user=$user;password=$password";
-    try {
-        $conexion = new PDO($dsn);
-        $sql = "SELECT * FROM empleado WHERE rut = :rut AND contrasena_usuario = :contrasena";
+    $conexion = new PDO($dsn);
+
+    // Verificar las credenciales para el login
+    if (isset($_POST['rut']) && isset($_POST['correo'])) {
+        $rut = $_POST['rut'];
+        $correo = $_POST['correo'];
+
+        // Consulta para verificar las credenciales
+        $sql = "SELECT * FROM empleado WHERE rut = :rut AND correo = :correo";
         $stmt = $conexion->prepare($sql);
         $stmt->bindParam(':rut', $rut);
-        $stmt->bindParam(':contrasena', $contrasena);
+        $stmt->bindParam(':correo', $correo);
         $stmt->execute();
 
-        // Verificar si se encontró un registro
-        if ($stmt->rowCount() == 1) {
-            // Usuario y contraseña válidos, iniciar sesión o redireccionar a la página deseada
-            // ...
-            echo "Autenticación exitosa";
+        // Verificar si se encontraron resultados
+        if ($stmt->rowCount() > 0) {
+            // Las credenciales son correctas
+            header('Location: menu.html');
+            exit();
         } else {
-            // Usuario o contraseña incorrectos, mostrar mensaje de error o redireccionar a la página de inicio de sesión
-            // ...
-            echo "Autenticación fallida";
+            // Las credenciales son incorrectas
+            header('Location: index.html');
+            exit();
         }
-    } catch (PDOException $e) {
-        echo "Error al conectarse a la base de datos: " . $e->getMessage();
     }
+} catch (PDOException $e) {
+    echo "Error al conectarse a la base de datos: " . $e->getMessage();
 }
 ?>

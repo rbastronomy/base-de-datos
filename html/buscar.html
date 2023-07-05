@@ -1,86 +1,62 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Buscar Empleado</title>
-	<link rel="stylesheet" href="buscardecoracion.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Empleado</title>
+    <link rel="stylesheet" href="buscardecoracion.css">
 </head>
 <body>
-	<h1>Buscar Empleado</h1>
+    <h1>Buscar Empleado</h1>
 
-	<div class="search-bar">
-		<input type="text" id="searchInput" class="search-input" placeholder="Buscar empleado..." />
-		<a href="menu.html" class="back-button">Regresar al Menú</a>
-	</div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar empleado..." />
+        <a href="menu.html" class="back-button">Regresar al Menú</a>
+    </div>
 
-	<table id="employeeTable">
-		<thead>
-			<tr>
-				<th>Rut</th>
-				<th>Nombre Completo</th>
-				<th>Correo Electrónico</th>
-				<th>Género</th>
-				<th>Fecha de Entrada</th>
-				<th>Fecha de Salida</th>
-				<th>Funcionario de Salud</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>20.965.928-k</td>
-				<td>Renato Fabian Barria Diaz</td>
-				<td>renatobarria@hotmail.com</td>
-				<td>Masculino</td>
-				<td>01/03/2023</td>
-				<td>15/03/2023</td>
-				<td>Dra. Polo</td>
-			</tr>
-			<tr>
-				<td>20.946.710-0</td>
-				<td>Carlos Hernan Saldes Lioi</td>
-				<td>csaldes03@gmail.com</td>
-				<td>Masculino</td>
-				<td>10/03/2023</td>
-				<td>20/03/2023</td>
-				<td>Dr. Simi</td>
-			</tr>
-			<tr>
-				<td>21.177.794-k</td>
-				<td>Juan Pablo Gomez Pizarro</td>
-				<td>JuanGomezpizarro2002@gmail.com</td>
-				<td>Masculino</td>
-				<td>05/03/2023</td>
-				<td>18/03/2023</td>
-				<td>Dr. Sins</td>
-			</tr>
-		</tbody>
-	</table>
+    <table id="employeeTable">
+        <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <!-- Agrega más columnas según tus necesidades -->
+        </tr>
+        <?php
+        include 'obtener_empleados.php';
 
-	<script>
-		// Función para filtrar los empleados según el valor de búsqueda
-		function filterEmployees() {
-			var input, filter, table, tr, td, i, txtValue;
-			input = document.getElementById("searchInput");
-			filter = input.value.toUpperCase();
-			table = document.getElementById("employeeTable");
-			tr = table.getElementsByTagName("tr");
-			
-			for (i = 0; i < tr.length; i++) {
-				td = tr[i].getElementsByTagName("td")[1]; // Columna del nombre completo
-				if (td) {
-					txtValue = td.textContent || td.innerText;
-					if (txtValue.toUpperCase().indexOf(filter) > -1) {
-						tr[i].style.display = "";
-					} else {
-						tr[i].style.display = "none";
-					}
-				}
-			}
-		}
+        while ($fila = mysqli_fetch_assoc($resultado)) {
+            ?>
+            <tr>
+                <td><?php echo $fila['id']; ?></td>
+                <td><?php echo $fila['nombre_completo']; ?></td>
+                <!-- Agrega más celdas según tus necesidades -->
+            </tr>
+        <?php } ?>
+    </table>
 
-		// Evento para detectar cambios en el campo de búsqueda
-		document.getElementById("searchInput").addEventListener("input", filterEmployees);
-	</script>
+    <script>
+        // Función para filtrar los empleados según el valor de búsqueda
+        function filterEmployees() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("employeeTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // Columna del nombre completo
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Evento para detectar cambios en el campo de búsqueda
+        document.getElementById("searchInput").addEventListener("input", filterEmployees);
+    </script>
 </body>
 </html>

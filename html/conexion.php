@@ -12,15 +12,15 @@ try {
     $conexion = new PDO($dsn);
 
     // Verificar las credenciales para el login
-    if (isset($_POST['rut']) && isset($_POST['correo'])) {
+    if (isset($_POST['rut']) && isset($_POST['contrasena'])) {
         $rut = $_POST['rut'];
-        $correo = $_POST['correo'];
+        $contrasena = $_POST['contrasena'];
 
         // Consulta para verificar las credenciales
-        $sql = "SELECT * FROM empleado WHERE rut = :rut AND correo = :correo";
+        $sql = "SELECT * FROM empleado WHERE rut = :rut AND contrasena = :contrasena";
         $stmt = $conexion->prepare($sql);
         $stmt->bindParam(':rut', $rut);
-        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':contrasena', $contrasena);
         $stmt->execute();
 
         // Verificar si se encontraron resultados

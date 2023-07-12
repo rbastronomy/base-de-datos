@@ -26,11 +26,11 @@ try {
         // Verificar si se encontraron resultados
         if ($stmt->rowCount() > 0) {
             // Las credenciales son correctas
-            header('Location: menu.html');
+            header('Location: menu.php');
             exit();
         } else {
             // Las credenciales son incorrectas
-            header('Location: index.html');
+            header('Location: login.php');
             exit();
         }
     }

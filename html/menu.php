@@ -71,16 +71,25 @@
 		</div>
 		<div class="menu">
 			<p class="menu-title">Crear</p>
-			<nav class="right-menu">
-				<a href="crear_persona.php">Crear Empleado</a>
+			<nav class="middle-menu">
+				<a href="crear_empleado.php">Crear Empleado</a>
 				<a href="crear_agenda.php">Crear Agenda</a>
 				<a href="crear_contrato.php">Crear Contrato</a>
 				<a href="crear_paciente.php">Crear Paciente</a>
 			</nav>
 		</div>
+		<div class="menu">
+			<p class="menu-title">Crear</p>
+			<nav class="right-menu">
+				<a href="eliminar_empleado.php">Borrar Empleado</a>
+				<a href="eliminar_agenda.php">Borrar Agenda</a>
+				<a href="eliminar_contrato.php">Borrar Contrato</a>
+				<a href="eliminar_paciente.php">Borrar Paciente</a>
+			</nav>
+		</div>
 	</div>
 
-	<a class="logout-button" href="login.php">Salir</a>
+	<a class="logout-button" href="index.php">Salir</a>
 
 	<footer>
 		<p>Derechos reservados</p>

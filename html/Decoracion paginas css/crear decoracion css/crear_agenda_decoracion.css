@@ -3,6 +3,7 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .container {
     max-width: 600px;
     margin: 0 auto;
@@ -12,7 +13,8 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-h1, h2 {
+h1,
+h2 {
     text-align: center;
     color: #333;
 }
@@ -38,9 +40,12 @@ select {
     box-sizing: border-box;
 }
 
-input[type="submit"] {
-    width: auto;
-    padding: 10px 20px;
+input[type="submit"],
+button {
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 16px;
     background-color: #4CAF50;
     color: #fff;
     border: none;
@@ -51,4 +56,37 @@ input[type="submit"] {
 .error-message {
     color: red;
     text-align: center;
+    margin-top: 10px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.checkbox-container label {
+    margin-left: 10px;
+}
+
+.opciones {
+    margin-top: 20px;
+}
+
+#menu-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#menu-button:hover {
+    background-color: #45a049;
 }

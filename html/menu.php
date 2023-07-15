@@ -79,7 +79,7 @@
 			</nav>
 		</div>
 		<div class="menu">
-			<p class="menu-title">Crear</p>
+			<p class="menu-title">Eliminar</p>
 			<nav class="right-menu">
 				<a href="eliminar_empleado.php">Borrar Empleado</a>
 				<a href="eliminar_agenda.php">Borrar Agenda</a>

@@ -12,6 +12,12 @@ try {
 
     $rut = $_GET['rut'];
 
+    // Borrar empleado de la tabla empleado_gestion
+    $consulta = "DELETE FROM empleado_gestion WHERE rut = :rut";
+    $stmt = $conexion->prepare($consulta);
+    $stmt->bindParam(':rut', $rut);
+    $stmt->execute();
+
     // Borrar empleado de la tabla empleado
     $consulta = "DELETE FROM empleado WHERE rut = :rut";
     $stmt = $conexion->prepare($consulta);
@@ -24,7 +30,7 @@ try {
     $stmt->bindParam(':rut', $rut);
     $stmt->execute();
 
-    echo "Empleado borrado correctamente desde empleado";
+    echo "Empleado borrado correctamente desde empleado_gestion";
 } catch (PDOException $e) {
     echo "Error al conectarse a la base de datos: " . $e->getMessage();
 }

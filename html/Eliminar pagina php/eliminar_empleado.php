@@ -33,7 +33,14 @@
             $conexion = new PDO($dsn);
             $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $consulta = "SELECT * FROM empleado";
+            $consulta = "SELECT empleado.rut, empleado.celular, empleado.nombre, empleado.correo, empleado.edad, empleado.f_nacimiento, empleado.direccion, empleado.genero, empleado.grado_academico, empleado.cargo, 
+            CASE WHEN empleado_salud.rut IS NOT NULL THEN 'Salud' 
+                 WHEN empleado_gestion.rut IS NOT NULL THEN 'Gestión' 
+                 ELSE '' 
+            END AS sector
+            FROM empleado
+            LEFT JOIN empleado_salud ON empleado.rut = empleado_salud.rut
+            LEFT JOIN empleado_gestion ON empleado.rut = empleado_gestion.rut";
             $stmt = $conexion->prepare($consulta);
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -58,6 +65,7 @@
                 <th>Género</th>
                 <th>Grado Académico</th>
                 <th>Cargo</th>
+                <th>Sector</th>
                 <th>Acciones</th>
             </tr>
             <?php
@@ -73,6 +81,7 @@
                 echo "<td contenteditable='false'>" . $fila['genero'] . "</td>";
                 echo "<td contenteditable='false'>" . $fila['grado_academico'] . "</td>";
                 echo "<td contenteditable='false'>" . $fila['cargo'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['sector'] . "</td>";
                 echo "<td><button class='action-button' onclick='confirmDelete(this.parentElement.parentElement)'>Borrar</button></td>";
                 echo "</tr>";
             }
@@ -172,17 +181,26 @@
             function deleteEmployee(row) {
                 var cells = row.getElementsByTagName("td");
                 var rut = cells[0].innerText;
+                var sector = cells[10].innerText;
 
-                // Realizar la solicitud AJAX para borrar el empleado de la base de datos
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        // La solicitud se completó correctamente, mostrar mensaje con SweetAlert2
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Empleado borrado',
-                            text: this.responseText,
+                if (sector === 'Salud') {
+                    deleteFromSalud();
+                } else if (sector === 'Gestión') {
+                    deleteFromGestion();
+                } else {
+                    deleteFromEmpleado();
+                }
+
+                function deleteFromSalud() {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // La solicitud se completó correctamente, mostrar mensaje con SweetAlert2
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Empleado borrado',
+                                text: this.responseText,
                             showConfirmButton: false,
                             timer: 2000 // Duración del mensaje en milisegundos (en este caso, 2 segundos)
                         });
@@ -191,8 +209,53 @@
                         row.remove();
                     }
                 };
-                xhttp.open("GET", "borrar_empleado.php?rut=" + rut, true); // Archivo PHP para borrar el empleado
-                xhttp.send();
+                    xhttp.open("GET", "borrar_empleado_salud.php?rut=" + rut, true);
+                    xhttp.send();
+                }
+
+                function deleteFromGestion() {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // La solicitud se completó correctamente, mostrar mensaje con SweetAlert2
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Empleado borrado',
+                                text: this.responseText,
+                            showConfirmButton: false,
+                            timer: 2000 // Duración del mensaje en milisegundos (en este caso, 2 segundos)
+                        });
+
+                        // Eliminar la fila de la tabla
+                        row.remove();
+                    }
+                };
+                    xhttp.open("GET", "borrar_empleado_gestion.php?rut=" + rut, true);
+                    xhttp.send();
+                }
+
+                function deleteFromEmpleado() {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // La solicitud se completó correctamente, mostrar mensaje con SweetAlert2
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Empleado borrado',
+                                text: this.responseText,
+                            showConfirmButton: false,
+                            timer: 2000 // Duración del mensaje en milisegundos (en este caso, 2 segundos)
+                        });
+
+                        // Eliminar la fila de la tabla
+                        row.remove();
+                    }
+                };
+                    xhttp.open("GET", "borrar_empleado.php?rut=" + rut, true);
+                    xhttp.send();
+                }
             }
 
             document.getElementById("searchInput").addEventListener("input", filterEmployees);

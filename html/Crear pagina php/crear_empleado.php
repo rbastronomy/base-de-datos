@@ -162,16 +162,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2>Datos Personales</h2>
         <form action="crear_empleado.php" method="POST">
             <label for="rut">RUT:</label>
-            <input type="text" id="rut" name="rut" required>
+            <input type="text" id="rut" name="rut" pattern="[0-9]{7,8}[0-9Kk]" maxlength="13" required title="El RUT debe contener solo números y el dígito verificador puede ser un número o la letra K. Longitud: 13 dígitos." oninput="formatRUT(this)">
 
             <label for="celular">Celular:</label>
-            <input type="text" id="celular" name="celular" required>
+            <input type="text" id="celular" name="celular" pattern="[0-9]+" required title="Solo se permiten números en el campo del celular.">
 
             <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <input type="text" id="nombre" name="nombre" pattern="[A-Za-z]+" required title="Solo se permiten letras en el campo del nombre.">
 
             <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo" required>
+            <input type="email" id="correo" name="correo" required pattern=".+@.+" title="El campo del correo debe contener una dirección de correo válida con el símbolo @.">
 
             <label for="edad">Edad:</label>
             <input type="number" id="edad" name="edad" required>
@@ -195,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" id="cargo" name="cargo" required>
 
             <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" name="contrasena" required>
+            <input type="password" id="contrasena" name="contrasena" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$" required title="La contraseña debe tener al menos un símbolo, una mayúscula, una minúscula y un número.">
 
             <h2>Tipo de Empleado</h2>
 
@@ -234,17 +234,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('crear_salud').addEventListener('change', function() {
-                var opcionesSalud = document.getElementById('opciones_salud');
-                opcionesSalud.style.display = this.checked ? 'block' : 'none';
-            });
-
-            document.getElementById('crear_gestion').addEventListener('change', function() {
-                var opcionesGestion = document.getElementById('opciones_gestion');
-                opcionesGestion.style.display = this.checked ? 'block' : 'none';
-            });
-        });
+        function formatRUT(input) {
+            // Remover guiones y puntos
+            var rut = input.value.replace(/[-.]/g, '');
+            // Volver a formatear el RUT con puntos y guión
+            var formattedRUT = rut.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '-' + rut.slice(-1);
+            // Actualizar el valor del campo de entrada
+            input.value = formattedRUT;
+        }
     </script>
 </body>
 

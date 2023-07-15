@@ -30,7 +30,7 @@ try {
             exit();
         } else {
             // Las credenciales son incorrectas
-            header('Location: login.php');
+            header('Location: index.php');
             exit();
         }
     }

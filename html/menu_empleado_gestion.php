@@ -78,6 +78,7 @@ if (!isset($_SESSION['rut'])) {
                 <a href="buscar_agenda.php">Buscar Agenda</a>
                 <a href="buscar_contrato.php">Buscar Contrato</a>
                 <a href="buscar_paciente.php">Buscar Paciente</a>
+                <a href="buscar_beneficio.php">Buscar Beneficio</a>
             </nav>
         </div>
         <div class="menu">

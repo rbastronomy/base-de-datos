@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Contrato</title>
+    <title>Buscar Beneficio</title>
     <link rel="stylesheet" href="buscar_decoracion.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
     <style>
@@ -41,10 +41,10 @@
     </style>
 </head>
 <body>
-    <h1>Buscar Contrato</h1>
+    <h1>Buscar Beneficio</h1>
 
     <div class="search-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="Buscar contrato..." />
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar beneficio..." />
         <a href="menu_empleado_gestion.php" class="back-button">Regresar al Menú</a>
     </div>
 
@@ -62,7 +62,7 @@
         $conexion = new PDO($dsn);
         $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $consulta = "SELECT * FROM contrato";
+        $consulta = "SELECT * FROM beneficio";
         $stmt = $conexion->prepare($consulta);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -75,31 +75,33 @@
     }
     ?>
 
-    <table id="contratoTable">
+    <table id="beneficioTable">
         <tr>
-            <th>ID Contrato</th>
-            <th>RUT</th>
             <th>ID Beneficio</th>
-            <th>Fecha de Inicio</th>
-            <th>Fecha de Término</th>
-            <th>Hora de Entrada</th>
-            <th>Horas Semanales</th>
-            <th>Sueldo</th>
-            <th>Hora de Salida</th>
-            <th>Acciones</th>
+            <th>Almuerzo</th>
+            <th>Locomoción</th>
+            <th>Ayuda Económica</th>
+            <th>Convenio Óptico</th>
+            <th>Traslado Aéreo Fiscal</th>
+            <th>Centro Recreacional</th>
+            <th>Convenio Tiendas Comerciales</th>
+            <th>Vivienda Fiscal</th>
+            <th>Convenio Buses</th>
+            <th class="acciones">Acciones</th>
         </tr>
         <?php
         foreach ($resultado as $fila) {
             echo "<tr>";
-            echo "<td>" . $fila['id_contrato'] . "</td>";
-            echo "<td>" . $fila['rut'] . "</td>";
             echo "<td>" . $fila['id_beneficio'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['f_inicio'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['f_termino'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['hora_entrada'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['horas_semanales'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['sueldo'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['hora_salida'] . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['almuerzo'] ? '&#x2713;' : '') . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['locomocion'] ? '&#x2713;' : '') . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['ayuda_economica'] ? '&#x2713;' : '') . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['convenio_optico'] ? '&#x2713;' : '') . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['traslado_aereo_fiscal'] ? '&#x2713;' : '') . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['centro_recreacional'] ? '&#x2713;' : '') . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['convenio_tiendas_comerciales'] ? '&#x2713;' : '') . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['vivienda_fiscal'] ? '&#x2713;' : '') . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['convenio_buses'] ? '&#x2713;' : '') . "</td>";
             echo "<td class='acciones'><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
             echo "</tr>";
         }
@@ -108,15 +110,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
     <script>
-        function filterContratos() {
+        function filterBeneficios() {
             var input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("searchInput");
             filter = input.value.toUpperCase();
-            table = document.getElementById("contratoTable");
+            table = document.getElementById("beneficioTable");
             tr = table.getElementsByTagName("tr");
 
             for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0]; // Columna del ID de Contrato
+                td = tr[i].getElementsByTagName("td")[0]; // Columna del ID de Beneficio
                 if (td) {
                     txtValue = td.textContent || td.innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -130,24 +132,32 @@
 
         function enableEditing(row) {
             var cells = row.getElementsByTagName("td");
-            for (var i = 3; i < cells.length - 1; i++) {
+            for (var i = 1; i < cells.length - 1; i++) {
                 cells[i].setAttribute("contenteditable", "true");
             }
-            row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='updateContrato(this.parentElement.parentElement)'>Guardar</button>";
+            row.getElementsByTagName("button")[0].innerText = "Guardar";
+            row.getElementsByTagName("button")[0].setAttribute("onclick", "saveBeneficioChanges(this.parentElement.parentElement)");
         }
 
-        function updateContrato(row) {
+        function enableSaveButton(row) {
+            var saveButton = row.getElementsByTagName("button")[0];
+            saveButton.disabled = false;
+            saveButton.classList.add("save-button-enabled");
+        }
+
+        function saveBeneficioChanges(row) {
             var cells = row.getElementsByTagName("td");
             var data = {
-                id_contrato: cells[0].innerText,
-                rut: cells[1].innerText,
-                id_beneficio: cells[2].innerText,
-                f_inicio: cells[3].innerText,
-                f_termino: cells[4].innerText,
-                hora_entrada: cells[5].innerText,
-                horas_semanales: cells[6].innerText,
-                sueldo: cells[7].innerText,
-                hora_salida: cells[8].innerText
+                id_beneficio: cells[0].innerText,
+                almuerzo: cells[1].innerText === '&#x2713;' ? 1 : 0,
+                locomocion: cells[2].innerText === '&#x2713;' ? 1 : 0,
+                ayuda_economica: cells[3].innerText === '&#x2713;' ? 1 : 0,
+                convenio_optico: cells[4].innerText === '&#x2713;' ? 1 : 0,
+                traslado_aereo_fiscal: cells[5].innerText === '&#x2713;' ? 1 : 0,
+                centro_recreacional: cells[6].innerText === '&#x2713;' ? 1 : 0,
+                convenio_tiendas_comerciales: cells[7].innerText === '&#x2713;' ? 1 : 0,
+                vivienda_fiscal: cells[8].innerText === '&#x2713;' ? 1 : 0,
+                convenio_buses: cells[9].innerText === '&#x2713;' ? 1 : 0
             };
 
             // Realizar la solicitud AJAX para actualizar los datos en la base de datos
@@ -165,18 +175,19 @@
                     });
 
                     // Restaurar la tabla a modo visualización
-                    for (var i = 3; i < cells.length - 1; i++) {
+                    for (var i = 1; i < cells.length - 1; i++) {
                         cells[i].setAttribute("contenteditable", "false");
                     }
-                    row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button>";
+                    row.getElementsByTagName("button")[0].innerText = "Modificar";
+                    row.getElementsByTagName("button")[0].setAttribute("onclick", "enableEditing(this.parentElement.parentElement)");
                 }
             };
-            xhttp.open("POST", "actualizar_contrato.php", true); // Archivo PHP para actualizar los datos
+            xhttp.open("POST", "actualizar_beneficio.php", true); // Archivo PHP para actualizar los datos
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send("data=" + JSON.stringify(data));
         }
 
-        document.getElementById("searchInput").addEventListener("input", filterContratos);
+        document.getElementById("searchInput").addEventListener("input", filterBeneficios);
     </script>
 </body>
 </html>

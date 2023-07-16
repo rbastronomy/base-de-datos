@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Empleado</title>
-    <link rel="stylesheet" href="crear_empleado_decoracion.css">
+    <link rel="stylesheet" href="crear_decoracion.css">
 </head>
 
 <body>
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2>Datos Personales</h2>
         <form action="crear_empleado.php" method="POST">
             <label for="rut">RUT:</label>
-            <input type="text" id="rut" name="rut" pattern="[0-9]{7,8}[0-9Kk]" maxlength="13" required title="El RUT debe contener solo números y el dígito verificador puede ser un número o la letra K. Longitud: 13 dígitos." oninput="formatRUT(this)">
+            <input type="text" id="rut" name="rut" pattern="[0-9]{7,8}[0-9]" maxlength="12" required title="El RUT debe contener solo números y el dígito verificador puede ser un número o la letra K." oninput="formatRUT(this)">
 
             <label for="celular">Celular:</label>
             <input type="text" id="celular" name="celular" pattern="[0-9]+" required title="Solo se permiten números en el campo del celular.">

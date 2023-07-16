@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Paciente</title>
-    <link rel="stylesheet" href="buscar_paciente_decoracion.css">
+    <link rel="stylesheet" href="buscar_decoracion.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
     <style>
         #message-container {
@@ -18,6 +18,25 @@
         #pacienteTable {
             position: relative;
             z-index: 1;
+        }
+
+        .acciones {
+            text-align: center;
+        }
+
+        .acciones button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .acciones button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -81,7 +100,7 @@
             echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['direccion'] . "</td>";
             echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['genero'] . "</td>";
             echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['prevision'] . "</td>";
-            echo "<td><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
+            echo "<td class='acciones'><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
             echo "</tr>";
         }
         ?>
@@ -114,8 +133,7 @@
             for (var i = 1; i < cells.length - 1; i++) {
                 cells[i].setAttribute("contenteditable", "true");
             }
-            row.getElementsByTagName("button")[0].innerText = "Guardar";
-            row.getElementsByTagName("button")[0].setAttribute("onclick", "savePacienteChanges(this.parentElement.parentElement)");
+            row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='savePacienteChanges(this.parentElement.parentElement)'>Guardar</button>";
         }
 
         function enableSaveButton(row) {
@@ -156,8 +174,7 @@
                     for (var i = 1; i < cells.length - 1; i++) {
                         cells[i].setAttribute("contenteditable", "false");
                     }
-                    row.getElementsByTagName("button")[0].innerText = "Modificar";
-                    row.getElementsByTagName("button")[0].setAttribute("onclick", "enableEditing(this.parentElement.parentElement)");
+                    row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button>";
                 }
             };
             xhttp.open("POST", "actualizar_paciente.php", true); // Archivo PHP para actualizar los datos

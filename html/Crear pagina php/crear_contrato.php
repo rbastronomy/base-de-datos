@@ -74,7 +74,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Contrato</title>
-    <link rel="stylesheet" href="crear_contrato_decoracion.css">
+    <link rel="stylesheet" href="crear_decoracion.css">
 </head>
 
 <body>
@@ -134,7 +134,7 @@ try {
             </div>
         </form>
 
-        <button id="menu-button" onclick="window.location.href='menu.php'">Menú</button>
+        <button id="menu-button" onclick="window.location.href='menu_empleado_gestion.php'">Menú</button>
 
         <?php
         if (isset($_GET['error'])) {

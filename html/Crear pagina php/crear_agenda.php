@@ -70,7 +70,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Agenda</title>
-    <link rel="stylesheet" href="crear_agenda_decoracion.css">
+    <link rel="stylesheet" href="crear_decoracion.css">
 </head>
 
 <body>

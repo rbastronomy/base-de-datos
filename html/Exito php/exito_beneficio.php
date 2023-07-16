@@ -12,8 +12,8 @@
     <div class="container">
         <h1>Éxito al crear el beneficio</h1>
         <p>El beneficio se ha creado correctamente.</p>
-        <a href="crear_beneficio.php">Volver a la creación de beneficio</a>
-        <a href="menu_empleado_gestion.php">Volver al menú</a>
+        <a href="crear_beneficio.php" class="back-button back-to-creation-button">Volver a la creación de beneficio</a>
+        <a href="menu_empleado_gestion.php" class="back-button back-to-menu-button">Volver al menú</a>
     </div>
 </body>
 

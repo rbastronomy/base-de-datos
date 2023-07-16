@@ -50,6 +50,7 @@
             <tr>
                 <th>ID Contrato</th>
                 <th>RUT</th>
+                <th>ID Beneficio</th>
                 <th>Fecha de Inicio</th>
                 <th>Fecha de Término</th>
                 <th>Hora de Entrada</th>
@@ -63,6 +64,7 @@
                 echo "<tr>";
                 echo "<td>" . $fila['id_contrato'] . "</td>";
                 echo "<td>" . $fila['rut'] . "</td>";
+                echo "<td>" . $fila['id_beneficio'] . "</td>";
                 echo "<td contenteditable='false'>" . $fila['f_inicio'] . "</td>";
                 echo "<td contenteditable='false'>" . $fila['f_termino'] . "</td>";
                 echo "<td contenteditable='false'>" . $fila['hora_entrada'] . "</td>";

@@ -14,23 +14,25 @@ try {
 
     $idContrato = $data['id_contrato'];
     $rut = $data['rut'];
+    $idBeneficio = $data['id_beneficio'];
     $fechaInicio = $data['f_inicio'];
     $fechaTermino = $data['f_termino'];
     $horaEntrada = $data['hora_entrada'];
+    $horaSalida = $data['hora_salida'];
     $horasSemanales = $data['horas_semanales'];
     $sueldo = $data['sueldo'];
-    $horaSalida = $data['hora_salida'];
 
-    $consulta = "UPDATE contrato SET rut = ?, f_inicio = ?, f_termino = ?, hora_entrada = ?, horas_semanales = ?, sueldo = ?, hora_salida = ? WHERE id_contrato = ?";
+    $consulta = "UPDATE contrato SET rut = ?, id_beneficio = ?, f_inicio = ?, f_termino = ?, hora_entrada = ?, hora_salida = ?, horas_semanales = ?, sueldo = ? WHERE id_contrato = ?";
     $stmt = $conexion->prepare($consulta);
     $stmt->bindParam(1, $rut);
-    $stmt->bindParam(2, $fechaInicio);
-    $stmt->bindParam(3, $fechaTermino);
-    $stmt->bindParam(4, $horaEntrada);
-    $stmt->bindParam(5, $horasSemanales);
-    $stmt->bindParam(6, $sueldo);
-    $stmt->bindParam(7, $horaSalida);
-    $stmt->bindParam(8, $idContrato);
+    $stmt->bindParam(2, $idBeneficio);
+    $stmt->bindParam(3, $fechaInicio);
+    $stmt->bindParam(4, $fechaTermino);
+    $stmt->bindParam(5, $horaEntrada);
+    $stmt->bindParam(6, $horaSalida);
+    $stmt->bindParam(7, $horasSemanales);
+    $stmt->bindParam(8, $sueldo);
+    $stmt->bindParam(9, $idContrato);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {

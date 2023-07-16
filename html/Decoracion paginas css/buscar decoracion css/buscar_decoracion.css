@@ -1,5 +1,5 @@
 body {
-    background-image: url("1.jpg");
+    background-image: url("2.jpg");
     background-size: cover;
     backdrop-filter: blur(10px);
     color: #333;
@@ -113,7 +113,8 @@ td:hover {
     padding: 10px;
     text-align: center;
 }
- /* Tu código CSS adicional */
+
+/* Tu código CSS adicional */
 .message {
     display: none;
     width: 80%;

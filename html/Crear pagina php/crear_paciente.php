@@ -99,7 +99,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Paciente</title>
-    <link rel="stylesheet" href="crear_paciente_decoracion.css">
+    <link rel="stylesheet" href="crear_decoracion.css">
 </head>
 
 <body>

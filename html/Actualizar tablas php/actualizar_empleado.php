@@ -12,7 +12,7 @@ try {
 
     $data = json_decode($_POST['data'], true);
 
-    $consulta = "UPDATE empleado SET nombre = :nombre, correo = :correo, edad = :edad, f_nacimiento = :f_nacimiento, direccion = :direccion, genero = :genero, grado_academico = :grado_academico, cargo = :cargo WHERE rut = :rut";
+    $consulta = "UPDATE empleado SET nombre = :nombre, correo = :correo, edad = :edad, f_nacimiento = :f_nacimiento, direccion = :direccion, genero = :genero, grado_academico = :grado_academico, cargo = :cargo, contrasena = :contrasena WHERE rut = :rut";
     $stmt = $conexion->prepare($consulta);
     $stmt->bindValue(':rut', $data['rut']);
     $stmt->bindValue(':nombre', $data['nombre']);
@@ -23,6 +23,7 @@ try {
     $stmt->bindValue(':genero', $data['genero']);
     $stmt->bindValue(':grado_academico', $data['grado_academico']);
     $stmt->bindValue(':cargo', $data['cargo']);
+    $stmt->bindValue(':contrasena', $data['contrasena']);
     $stmt->execute();
 
     // Verificar si se actualizó correctamente

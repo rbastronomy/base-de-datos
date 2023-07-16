@@ -1,3 +1,5 @@
+/* exito_beneficio_decoracion.css */
+
 body {
     background-image: url("5.jpg");
     background-repeat: no-repeat;
@@ -36,3 +38,15 @@ p {
 .back-button:hover {
     background-color: #45a049;
 }
+
+/* Estilos adicionales para los botones de volver */
+.back-to-creation-button,
+.back-to-menu-button {
+    margin-right: 10px;
+}
+
+.back-to-creation-button:hover,
+.back-to-menu-button:hover {
+    background-color: #3f8c41;
+}
+

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Agenda</title>
-    <link rel="stylesheet" href="buscar_agenda_decoracion.css">
+    <link rel="stylesheet" href="buscar_decoracion.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
     <style>
         #message-container {
@@ -15,9 +15,28 @@
             z-index: 9999;
         }
         
-        #agendaTable {
+        #beneficioTable {
             position: relative;
             z-index: 1;
+        }
+
+        .acciones {
+            text-align: center;
+        }
+
+        .acciones button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .acciones button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -71,11 +90,11 @@
             echo "<tr>";
             echo "<td>" . $fila['id_agenda'] . "</td>";
             echo "<td>" . $fila['rut'] . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['estado_atencion'] . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['hora_citacion'] . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['fecha_agenda'] . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['duracion_atencion'] . "</td>";
-            echo "<td><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
+            echo "<td contenteditable='false'>" . $fila['estado_atencion'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['hora_citacion'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['fecha_agenda'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['duracion_atencion'] . "</td>";
+            echo "<td class='acciones'><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
             echo "</tr>";
         }
         ?>
@@ -108,17 +127,10 @@
             for (var i = 2; i < cells.length - 1; i++) {
                 cells[i].setAttribute("contenteditable", "true");
             }
-            row.getElementsByTagName("button")[0].innerText = "Guardar";
-            row.getElementsByTagName("button")[0].setAttribute("onclick", "saveAgendaChanges(this.parentElement.parentElement)");
+            row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='updateAgenda(this.parentElement.parentElement)'>Guardar</button>";
         }
 
-        function enableSaveButton(row) {
-            var saveButton = row.getElementsByTagName("button")[0];
-            saveButton.disabled = false;
-            saveButton.classList.add("save-button-enabled");
-        }
-
-        function saveAgendaChanges(row) {
+        function updateAgenda(row) {
             var cells = row.getElementsByTagName("td");
             var data = {
                 id_agenda: cells[0].innerText,
@@ -147,8 +159,7 @@
                     for (var i = 2; i < cells.length - 1; i++) {
                         cells[i].setAttribute("contenteditable", "false");
                     }
-                    row.getElementsByTagName("button")[0].innerText = "Modificar";
-                    row.getElementsByTagName("button")[0].setAttribute("onclick", "enableEditing(this.parentElement.parentElement)");
+                    row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button>";
                 }
             };
             xhttp.open("POST", "actualizar_agenda.php", true); // Archivo PHP para actualizar los datos

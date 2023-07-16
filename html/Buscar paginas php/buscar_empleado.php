@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Empleado</title>
-    <link rel="stylesheet" href="buscar_empleado_decoracion.css">
+    <link rel="stylesheet" href="buscar_decoracion.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
     <style>
         #message-container {
@@ -18,6 +18,25 @@
         #employeeTable {
             position: relative;
             z-index: 1;
+        }
+
+        .acciones {
+            text-align: center;
+        }
+
+        .acciones button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .acciones button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -43,7 +62,7 @@
         $conexion = new PDO($dsn);
         $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $consulta = "SELECT * FROM empleado";
+        $consulta = "SELECT *, contrasena FROM empleado";
         $stmt = $conexion->prepare($consulta);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -68,6 +87,7 @@
             <th>Género</th>
             <th>Grado Académico</th>
             <th>Cargo</th>
+            <th>Contraseña</th>
             <th>Acciones</th>
         </tr>
         <?php
@@ -83,7 +103,8 @@
             echo "<td contenteditable='false'>" . $fila['genero'] . "</td>";
             echo "<td contenteditable='false'>" . $fila['grado_academico'] . "</td>";
             echo "<td contenteditable='false'>" . $fila['cargo'] . "</td>";
-            echo "<td><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
+            echo "<td contenteditable='false'>" . $fila['contrasena'] . "</td>";
+            echo "<td class='acciones'><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
             echo "</tr>";
         }
         ?>
@@ -116,8 +137,7 @@
             for (var i = 2; i < cells.length - 1; i++) {
                 cells[i].setAttribute("contenteditable", "true");
             }
-            row.getElementsByTagName("button")[0].innerText = "Guardar";
-            row.getElementsByTagName("button")[0].setAttribute("onclick", "updateEmployee(this.parentElement.parentElement)");
+            row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='updateEmployee(this.parentElement.parentElement)'>Guardar</button>";
         }
 
         function updateEmployee(row) {
@@ -132,7 +152,8 @@
                 direccion: cells[6].innerText,
                 genero: cells[7].innerText,
                 grado_academico: cells[8].innerText,
-                cargo: cells[9].innerText
+                cargo: cells[9].innerText,
+                contrasena: cells[10].innerText
             };
 
             // Realizar la solicitud AJAX para actualizar los datos en la base de datos
@@ -153,8 +174,7 @@
                     for (var i = 2; i < cells.length - 1; i++) {
                         cells[i].setAttribute("contenteditable", "false");
                     }
-                    row.getElementsByTagName("button")[0].innerText = "Modificar";
-                    row.getElementsByTagName("button")[0].setAttribute("onclick", "enableEditing(this.parentElement.parentElement)");
+                    row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button>";
                 }
             };
             xhttp.open("POST", "actualizar_empleado.php", true); // Archivo PHP para actualizar los datos

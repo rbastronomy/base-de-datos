@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Obtener los RUTs de los empleados disponibles
+// Obtener los RUTs de los empleados disponibles y sus nombres
 try {
     $host = 'magallanes.inf.unap.cl';
     $port = '5432';
@@ -58,10 +58,10 @@ try {
     $conexion = new PDO($dsn);
     $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $consulta_ruts = "SELECT rut FROM empleado";
+    $consulta_ruts = "SELECT rut, nombre FROM empleado";
     $stmt_ruts = $conexion->prepare($consulta_ruts);
     $stmt_ruts->execute();
-    $ruts = $stmt_ruts->fetchAll(PDO::FETCH_COLUMN);
+    $ruts = $stmt_ruts->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $error = "Error al conectarse a la base de datos: " . $e->getMessage();
 }
@@ -89,11 +89,13 @@ try {
             </div>
 
             <div class="form-row">
-                <label for="rut">RUT:</label>
+                <label for="rut">RUT - Nombre de Empleado:</label>
                 <select id="rut" name="rut" required>
-                    <?php foreach ($ruts as $rut) : ?>
-                        <option value="<?php echo $rut; ?>"><?php echo $rut; ?></option>
-                    <?php endforeach; ?>
+                    <?php if (!empty($ruts)): ?>
+                        <?php foreach ($ruts as $rut) : ?>
+                            <option value="<?php echo $rut['rut']; ?>"><?php echo $rut['rut'] . ' - ' . $rut['nombre']; ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
             </div>
 
@@ -132,7 +134,7 @@ try {
             </div>
         </form>
 
-        <button id="menu-button" onclick="window.location.href='menu_empleado_gestion.php'">Menú</button>
+        <button id="menu-button" onclick="window.location.href='menu.php'">Menú</button>
 
         <?php
         if (isset($_GET['error'])) {

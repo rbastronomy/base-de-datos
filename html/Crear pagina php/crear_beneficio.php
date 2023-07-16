@@ -25,10 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $vivienda_fiscal = $_POST['vivienda_fiscal'];
         $convenio_buses = $_POST['convenio_buses'];
 
-        $sql = "INSERT INTO beneficio (ID_contrato, Almuerzo, Locomocion, Ayuda_economica, Convenio_Optico, Traslado_aereo_fiscal, Centro_recreacional, Convenio_Tiendas_Comerciales, Vivienda_Fiscal, Convenio_Buses)
-                VALUES (:ID_contrato, :Almuerzo, :Locomocion, :Ayuda_economica, :Convenio_Optico, :Traslado_aereo_fiscal, :Centro_recreacional, :Convenio_Tiendas_Comerciales, :Vivienda_Fiscal, :Convenio_Buses)";
+        $sql = "INSERT INTO beneficio (ID_beneficio, ID_contrato, Almuerzo, Locomocion, Ayuda_economica, Convenio_Optico, Traslado_aereo_fiscal, Centro_recreacional, Convenio_Tiendas_Comerciales, Vivienda_Fiscal, Convenio_Buses)
+                VALUES (:ID_beneficio, :ID_contrato, :Almuerzo, :Locomocion, :Ayuda_economica, :Convenio_Optico, :Traslado_aereo_fiscal, :Centro_recreacional, :Convenio_Tiendas_Comerciales, :Vivienda_Fiscal, :Convenio_Buses)";
 
         $stmt = $conexion->prepare($sql);
+        $stmt->bindValue(':ID_beneficio', $_POST['ID_beneficio']);
         $stmt->bindParam(':ID_contrato', $id_contrato);
         $stmt->bindParam(':Almuerzo', $almuerzo);
         $stmt->bindParam(':Locomocion', $locomocion);
@@ -99,6 +100,11 @@ try {
             </div>
 
             <div class="form-row">
+                <label for="id_beneficio">ID del Beneficio:</label>
+                <input type="text" id="id_beneficio" name="ID_beneficio">
+            </div>
+
+            <div class="form-row">
                 <label for="almuerzo">Almuerzo:</label>
                 <input type="checkbox" id="almuerzo" name="almuerzo" value="1">
             </div>
@@ -148,7 +154,7 @@ try {
             </div>
         </form>
 
-        <button id="menu-button" onclick="window.location.href='menu.php'">Menú</button>
+        <button id="menu-button" onclick="window.location.href='menu_empleado_gestion.php'">Menú</button>
 
         <?php
         if (isset($_GET['error'])) {

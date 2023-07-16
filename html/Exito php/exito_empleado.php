@@ -12,7 +12,7 @@
     <div class="container">
         <h1>Empleado creado exitosamente</h1>
         <p>El Empleado ha sido creado correctamente.</p>
-        <a href="menu.php" class="back-button">Regresar al Menú</a>
+        <a href="menu_empleado_gestion.php" class="back-button">Regresar al Menú</a>
     </div>
 </body>
 

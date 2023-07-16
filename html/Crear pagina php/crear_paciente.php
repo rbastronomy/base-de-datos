@@ -163,7 +163,7 @@ try {
 
         <button id="empleado-paciente-button" onclick="toggleEmpleadoPaciente()">¿Crear un empleado paciente?</button>
 
-        <button id="menu-button" onclick="window.location.href='menu.php'">Menú</button>
+        <button id="menu-button" onclick="window.location.href='menu_empleado_gestion.php'">Menú</button>
 
         <?php
         if (isset($_GET['error'])) {

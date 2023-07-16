@@ -16,7 +16,7 @@
     <div class="container">
         <div class="search-bar">
             <input type="text" id="searchInput" class="search-input" placeholder="Buscar empleado..." />
-            <a href="menu.php" class="back-button">Regresar al Menú</a>
+            <a href="menu_empleado_gestion.php" class="back-button">Regresar al Menú</a>
         </div>
 
         <div id="message-container"></div>
@@ -35,8 +35,8 @@
 
             $consulta = "SELECT empleado.rut, empleado.celular, empleado.nombre, empleado.correo, empleado.edad, empleado.f_nacimiento, empleado.direccion, empleado.genero, empleado.grado_academico, empleado.cargo, 
             CASE WHEN empleado_salud.rut IS NOT NULL THEN 'Salud' 
-                 WHEN empleado_gestion.rut IS NOT NULL THEN 'Gestión' 
-                 ELSE '' 
+                WHEN empleado_gestion.rut IS NOT NULL THEN 'Gestión' 
+                ELSE '' 
             END AS sector
             FROM empleado
             LEFT JOIN empleado_salud ON empleado.rut = empleado_salud.rut

@@ -26,7 +26,7 @@
 
     <div class="search-bar">
         <input type="text" id="searchInput" class="search-input" placeholder="Buscar contrato..." />
-        <a href="menu.php" class="back-button">Regresar al Menú</a>
+        <a href="menu_empleado_gestion.php" class="back-button">Regresar al Menú</a>
     </div>
 
     <div id="message-container"></div>

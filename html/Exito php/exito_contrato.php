@@ -12,7 +12,7 @@
     <div class="container">
         <h1>Contrato creado exitosamente</h1>
         <p>El contrato ha sido creado correctamente.</p>
-        <a href="menu.php" class="back-button">Regresar al Menú</a>
+        <a href="menu_empleado_gestion.php" class="back-button">Regresar al Menú</a>
     </div>
 </body>
 

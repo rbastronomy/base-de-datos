@@ -16,24 +16,76 @@ try {
         $rut = $_POST['rut'];
         $contrasena = $_POST['contrasena'];
 
-        // Consulta para verificar las credenciales
-        $sql = "SELECT * FROM empleado WHERE rut = :rut AND contrasena = :contrasena";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':rut', $rut);
-        $stmt->bindParam(':contrasena', $contrasena);
-        $stmt->execute();
+        // Consulta para verificar las credenciales en empleado_gestion
+        $sql_gestion = "SELECT * FROM empleado_gestion WHERE rut = :rut AND contrasena = :contrasena";
+        $stmt_gestion = $conexion->prepare($sql_gestion);
+        $stmt_gestion->bindParam(':rut', $rut);
+        $stmt_gestion->bindParam(':contrasena', $contrasena);
+        $stmt_gestion->execute();
 
-        // Verificar si se encontraron resultados
-        if ($stmt->rowCount() > 0) {
-            // Las credenciales son correctas
-            header('Location: menu.php');
+        // Verificar si se encontraron resultados en empleado_gestion
+        if ($stmt_gestion->rowCount() > 0) {
+            // Obtener los datos del empleado_gestion
+            $empleado = $stmt_gestion->fetch(PDO::FETCH_ASSOC);
+
+            // Iniciar sesión y almacenar los datos del empleado_gestion
+            session_start();
+            $_SESSION['rut'] = $empleado['rut'];
+            $_SESSION['nombre'] = $empleado['nombre'];
+            $_SESSION['rol'] = 'Empleado Gestión';
+
+            header('Location: menu_empleado_gestion.php');
             exit();
-        } else {
-            // Las credenciales son incorrectas
-            header('Location: index.php');
+        }
+
+        // Consulta para verificar las credenciales en empleado_salud
+        $sql_salud = "SELECT * FROM empleado_salud WHERE rut = :rut AND contrasena = :contrasena";
+        $stmt_salud = $conexion->prepare($sql_salud);
+        $stmt_salud->bindParam(':rut', $rut);
+        $stmt_salud->bindParam(':contrasena', $contrasena);
+        $stmt_salud->execute();
+
+        // Verificar si se encontraron resultados en empleado_salud
+        if ($stmt_salud->rowCount() > 0) {
+            // Obtener los datos del empleado_salud
+            $empleado = $stmt_salud->fetch(PDO::FETCH_ASSOC);
+
+            // Iniciar sesión y almacenar los datos del empleado_salud
+            session_start();
+            $_SESSION['rut'] = $empleado['rut'];
+            $_SESSION['nombre'] = $empleado['nombre'];
+            $_SESSION['rol'] = 'Empleado Salud';
+
+            header('Location: menu_empleado_salud.php');
+            exit();
+        }
+
+        // Consulta para verificar las credenciales en empleado
+        $sql_empleado = "SELECT * FROM empleado WHERE rut = :rut AND contrasena = :contrasena";
+        $stmt_empleado = $conexion->prepare($sql_empleado);
+        $stmt_empleado->bindParam(':rut', $rut);
+        $stmt_empleado->bindParam(':contrasena', $contrasena);
+        $stmt_empleado->execute();
+
+        // Verificar si se encontraron resultados en empleado
+        if ($stmt_empleado->rowCount() > 0) {
+            // Obtener los datos del empleado
+            $empleado = $stmt_empleado->fetch(PDO::FETCH_ASSOC);
+
+            // Iniciar sesión y almacenar los datos del empleado
+            session_start();
+            $_SESSION['rut'] = $empleado['rut'];
+            $_SESSION['nombre'] = $empleado['nombre'];
+            $_SESSION['rol'] = 'Empleado';
+
+            header('Location: menu_empleado.php');
             exit();
         }
     }
+
+    // Las credenciales son incorrectas o no se encontró el rut en ninguna tabla
+    header('Location: index.php');
+    exit();
 } catch (PDOException $e) {
     echo "Error al conectarse a la base de datos: " . $e->getMessage();
 }

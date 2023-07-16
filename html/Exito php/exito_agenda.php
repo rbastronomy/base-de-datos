@@ -14,7 +14,7 @@
 
         <p>La agenda se ha creado exitosamente.</p>
 
-        <button class="back-button" onclick="window.location.href='menu.php'">Volver al Menú</button>
+        <button class="back-button" onclick="window.location.href='menu_empleado_gestion.php'">Volver al Menú</button>
     </div>
 </body>
 

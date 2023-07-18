@@ -1,3 +1,20 @@
+<?php
+$error = "";
+    $registrarSalidaHabilitado = false;
+    
+    session_start();
+    
+    // Obtener el RUT y rol de la sesión
+    $rut = isset($_SESSION['rut']) ? $_SESSION['rut'] : '';
+    $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
+    
+    // Verificar si se ha iniciado sesión con un rol válido
+    if (empty($rol) || !in_array($rol, ['Empleado Salud', 'Empleado Gestión', 'Empleado', 'Supervisor'])) {
+        // Redirigir a una página de error o mostrar un mensaje de error apropiado
+        echo "Error: Rol de usuario inválido.";
+        exit;
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,24 +36,16 @@
             position: relative;
             z-index: 1;
         }
-
-        .acciones {
-            text-align: center;
-        }
-
-        .acciones button {
-            padding: 5px 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-        }
-
-        .acciones button:hover {
-            background-color: #0056b3;
+        .menu-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -45,7 +54,7 @@
 
     <div class="search-bar">
         <input type="text" id="searchInput" class="search-input" placeholder="Buscar beneficio..." />
-        <a href="menu_empleado_gestion.php" class="back-button">Regresar al Menú</a>
+        <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
     </div>
 
     <div id="message-container"></div>
@@ -87,22 +96,22 @@
             <th>Convenio Tiendas Comerciales</th>
             <th>Vivienda Fiscal</th>
             <th>Convenio Buses</th>
-            <th class="acciones">Acciones</th>
+            <th>Acciones</th>
         </tr>
         <?php
         foreach ($resultado as $fila) {
             echo "<tr>";
             echo "<td>" . $fila['id_beneficio'] . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['almuerzo'] ? '&#x2713;' : '') . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['locomocion'] ? '&#x2713;' : '') . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['ayuda_economica'] ? '&#x2713;' : '') . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['convenio_optico'] ? '&#x2713;' : '') . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['traslado_aereo_fiscal'] ? '&#x2713;' : '') . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['centro_recreacional'] ? '&#x2713;' : '') . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['convenio_tiendas_comerciales'] ? '&#x2713;' : '') . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['vivienda_fiscal'] ? '&#x2713;' : '') . "</td>";
-            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['convenio_buses'] ? '&#x2713;' : '') . "</td>";
-            echo "<td class='acciones'><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
+            echo "<td><input type='checkbox' " . ($fila['almuerzo'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><input type='checkbox' " . ($fila['locomocion'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><input type='checkbox' " . ($fila['ayuda_economica'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><input type='checkbox' " . ($fila['convenio_optico'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><input type='checkbox' " . ($fila['traslado_aereo_fiscal'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><input type='checkbox' " . ($fila['centro_recreacional'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><input type='checkbox' " . ($fila['convenio_tiendas_comerciales'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><input type='checkbox' " . ($fila['vivienda_fiscal'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><input type='checkbox' " . ($fila['convenio_buses'] ? 'checked' : '') . " disabled></td>";
+            echo "<td><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
             echo "</tr>";
         }
         ?>
@@ -132,8 +141,12 @@
 
         function enableEditing(row) {
             var cells = row.getElementsByTagName("td");
+            var checkboxes = row.getElementsByTagName("input");
             for (var i = 1; i < cells.length - 1; i++) {
-                cells[i].setAttribute("contenteditable", "true");
+                checkboxes[i - 1].removeAttribute("disabled");
+                checkboxes[i - 1].addEventListener("change", function() {
+                    enableSaveButton(this.parentElement.parentElement);
+                });
             }
             row.getElementsByTagName("button")[0].innerText = "Guardar";
             row.getElementsByTagName("button")[0].setAttribute("onclick", "saveBeneficioChanges(this.parentElement.parentElement)");
@@ -147,17 +160,18 @@
 
         function saveBeneficioChanges(row) {
             var cells = row.getElementsByTagName("td");
+            var checkboxes = row.getElementsByTagName("input");
             var data = {
                 id_beneficio: cells[0].innerText,
-                almuerzo: cells[1].innerText === '&#x2713;' ? 1 : 0,
-                locomocion: cells[2].innerText === '&#x2713;' ? 1 : 0,
-                ayuda_economica: cells[3].innerText === '&#x2713;' ? 1 : 0,
-                convenio_optico: cells[4].innerText === '&#x2713;' ? 1 : 0,
-                traslado_aereo_fiscal: cells[5].innerText === '&#x2713;' ? 1 : 0,
-                centro_recreacional: cells[6].innerText === '&#x2713;' ? 1 : 0,
-                convenio_tiendas_comerciales: cells[7].innerText === '&#x2713;' ? 1 : 0,
-                vivienda_fiscal: cells[8].innerText === '&#x2713;' ? 1 : 0,
-                convenio_buses: cells[9].innerText === '&#x2713;' ? 1 : 0
+                almuerzo: checkboxes[0].checked ? 1 : 0,
+                locomocion: checkboxes[1].checked ? 1 : 0,
+                ayuda_economica: checkboxes[2].checked ? 1 : 0,
+                convenio_optico: checkboxes[3].checked ? 1 : 0,
+                traslado_aereo_fiscal: checkboxes[4].checked ? 1 : 0,
+                centro_recreacional: checkboxes[5].checked ? 1 : 0,
+                convenio_tiendas_comerciales: checkboxes[6].checked ? 1 : 0,
+                vivienda_fiscal: checkboxes[7].checked ? 1 : 0,
+                convenio_buses: checkboxes[8].checked ? 1 : 0
             };
 
             // Realizar la solicitud AJAX para actualizar los datos en la base de datos
@@ -176,7 +190,8 @@
 
                     // Restaurar la tabla a modo visualización
                     for (var i = 1; i < cells.length - 1; i++) {
-                        cells[i].setAttribute("contenteditable", "false");
+                        checkboxes[i - 1].setAttribute("disabled", "disabled");
+                        checkboxes[i - 1].removeEventListener("change", enableSaveButton);
                     }
                     row.getElementsByTagName("button")[0].innerText = "Modificar";
                     row.getElementsByTagName("button")[0].setAttribute("onclick", "enableEditing(this.parentElement.parentElement)");
@@ -189,5 +204,21 @@
 
         document.getElementById("searchInput").addEventListener("input", filterBeneficios);
     </script>
+    <?php
+    function getMenuURL($rol) {
+        switch ($rol) {
+            case 'Empleado Salud':
+                return 'menu_empleado_salud.php';
+            case 'Empleado Gestión':
+                return 'menu_empleado_gestion.php';
+            case 'Empleado':
+                return 'menu_supervisor.php';
+            case 'Supervisor':
+                return 'menu_supervisor.php';
+            default:
+                return 'menu.php';
+        }
+    }
+    ?>
 </body>
 </html>

@@ -33,6 +33,7 @@ try {
             $_SESSION['rut'] = $empleado['rut'];
             $_SESSION['nombre'] = $empleado['nombre'];
             $_SESSION['rol'] = 'Empleado Gestión';
+            $_SESSION['estado_asistencia'] = 0;
 
             header('Location: menu_empleado_gestion.php');
             exit();
@@ -78,7 +79,12 @@ try {
             $_SESSION['nombre'] = $empleado['nombre'];
             $_SESSION['rol'] = 'Empleado';
 
-            header('Location: menu_empleado.php');
+            // Verificar el tipo de cargo del empleado normal
+            if ($empleado['cargo'] == 'Supervisor') {
+                header('Location: menu_supervisor.php');
+            } else {
+                header('Location: menu_empleado.php');
+            }
             exit();
         }
     }
@@ -89,4 +95,3 @@ try {
 } catch (PDOException $e) {
     echo "Error al conectarse a la base de datos: " . $e->getMessage();
 }
-?>

@@ -1,5 +1,23 @@
 <?php
 $error = "";
+$registrarSalidaHabilitado = false;
+
+session_start();
+
+// Obtener el RUT y rol de la sesión
+$rut = isset($_SESSION['rut']) ? $_SESSION['rut'] : '';
+$rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
+
+// Verificar si se ha iniciado sesión con un rol válido
+if (empty($rol) || !in_array($rol, ['Empleado Salud', 'Empleado Gestión', 'Empleado', 'Supervisor'])) {
+    // Redirigir a una página de error o mostrar un mensaje de error apropiado
+    echo "Error: Rol de usuario inválido.";
+    exit;
+}
+?>
+
+<?php
+$error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -14,8 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conexion = new PDO($dsn);
         $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $idContrato = $_POST['id_contrato'];
-        $idBeneficio = $_POST['id_beneficio'];
         $almuerzo = isset($_POST['almuerzo']) ? 1 : 0;
         $locomocion = isset($_POST['locomocion']) ? 1 : 0;
         $ayudaEconomica = isset($_POST['ayuda_economica']) ? 1 : 0;
@@ -27,11 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $convenioBuses = isset($_POST['convenio_buses']) ? 1 : 0;
 
         // Insertar en la tabla "beneficio"
-        $sql_beneficio = "INSERT INTO beneficio (id_beneficio, almuerzo, locomocion, ayuda_economica, convenio_optico, traslado_aereo_fiscal, centro_recreacional, convenio_tiendas_comerciales, vivienda_fiscal, convenio_buses)
-                        VALUES (:id_beneficio, :almuerzo, :locomocion, :ayuda_economica, :convenio_optico, :traslado_aereo_fiscal, :centro_recreacional, :convenio_tiendas_comerciales, :vivienda_fiscal, :convenio_buses)";
+        $sql_beneficio = "INSERT INTO beneficio (almuerzo, locomocion, ayuda_economica, convenio_optico, traslado_aereo_fiscal, centro_recreacional, convenio_tiendas_comerciales, vivienda_fiscal, convenio_buses)
+                        VALUES (:almuerzo, :locomocion, :ayuda_economica, :convenio_optico, :traslado_aereo_fiscal, :centro_recreacional, :convenio_tiendas_comerciales, :vivienda_fiscal, :convenio_buses)";
 
         $stmt_beneficio = $conexion->prepare($sql_beneficio);
-        $stmt_beneficio->bindParam(':id_beneficio', $idBeneficio);
         $stmt_beneficio->bindParam(':almuerzo', $almuerzo);
         $stmt_beneficio->bindParam(':locomocion', $locomocion);
         $stmt_beneficio->bindParam(':ayuda_economica', $ayudaEconomica);
@@ -62,6 +77,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Crear Beneficio</title>
     <link rel="stylesheet" href="crear_decoracion.css">
 </head>
+<style>
+    .menu-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+</style>
 
 <body>
     <div class="container">
@@ -69,39 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <h2>Datos del Beneficio</h2>
         <form action="crear_beneficio.php" method="POST" class="paciente-form">
-            <div class="form-row">
-                <label for="id_contrato">ID Contrato:</label>
-                <select id="id_contrato" name="id_contrato" required>
-                    <?php
-                    try {
-                        $host = 'magallanes.inf.unap.cl';
-                        $port = '5432';
-                        $dbname = 'jgomez';
-                        $user = 'jgomez';
-                        $password = '262m79VhrgMj';
-
-                        $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;user=$user;password=$password";
-                        $conexion = new PDO($dsn);
-                        $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                        $stmt_contratos = $conexion->query("SELECT id_contrato FROM contrato");
-                        $contratos = $stmt_contratos->fetchAll(PDO::FETCH_COLUMN);
-
-                        foreach ($contratos as $contrato) {
-                            echo "<option value='$contrato'>$contrato</option>";
-                        }
-                    } catch (PDOException $e) {
-                        $error = "Error al obtener los contratos: " . $e->getMessage();
-                    }
-                    ?>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="id_beneficio">ID Beneficio:</label>
-                <input type="text" id="id_beneficio" name="id_beneficio" required>
-            </div>
-
             <div class="form-row">
                 <label for="almuerzo">Almuerzo:</label>
                 <input type="checkbox" id="almuerzo" name="almuerzo">
@@ -152,7 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
 
-        <button id="menu-button" onclick="window.location.href='menu_empleado_gestion.php'">Menú</button>
+        <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
+
 
         <?php
         if (isset($_GET['error'])) {
@@ -162,6 +158,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         ?>
     </div>
+    <?php
+    function getMenuURL($rol)
+    {
+        switch ($rol) {
+            case 'Empleado Salud':
+                return 'menu_empleado_salud.php';
+            case 'Empleado Gestión':
+                return 'menu_empleado_gestion.php';
+            case 'Empleado':
+                return 'menu_supervisor.php';
+            case 'Supervisor':
+                return 'menu_supervisor.php';
+            default:
+                return 'menu.php';
+        }
+    }
+    ?>
 </body>
 
 </html>

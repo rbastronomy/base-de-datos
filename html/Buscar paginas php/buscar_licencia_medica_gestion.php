@@ -1,26 +1,27 @@
 <?php
 $error = "";
-    $registrarSalidaHabilitado = false;
-    
-    session_start();
-    
-    // Obtener el RUT y rol de la sesión
-    $rut = isset($_SESSION['rut']) ? $_SESSION['rut'] : '';
-    $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
-    
-    // Verificar si se ha iniciado sesión con un rol válido
-    if (empty($rol) || !in_array($rol, ['Empleado Salud', 'Empleado Gestión', 'Empleado', 'Supervisor'])) {
-        // Redirigir a una página de error o mostrar un mensaje de error apropiado
-        echo "Error: Rol de usuario inválido.";
-        exit;
-    }
+$registrarSalidaHabilitado = false;
+
+session_start();
+
+// Obtener el RUT y rol de la sesión
+$rut = isset($_SESSION['rut']) ? $_SESSION['rut'] : '';
+$rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
+
+// Verificar si se ha iniciado sesión con un rol válido
+if (empty($rol) || !in_array($rol, ['Empleado Salud', 'Empleado Gestión', 'Empleado', 'Supervisor'])) {
+    // Redirigir a una página de error o mostrar un mensaje de error apropiado
+    echo "Error: Rol de usuario inválido.";
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Contrato</title>
+    <title>Buscar Licencia Médica</title>
     <link rel="stylesheet" href="buscar_decoracion.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
     <style>
@@ -31,8 +32,8 @@ $error = "";
             transform: translate(-50%, -50%);
             z-index: 9999;
         }
-        
-        #beneficioTable {
+
+        #licenciamedicaTable {
             position: relative;
             z-index: 1;
         }
@@ -68,11 +69,12 @@ $error = "";
         }
     </style>
 </head>
+
 <body>
-    <h1>Buscar Contrato</h1>
+    <h1>Buscar Licencia Médica</h1>
 
     <div class="search-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="Buscar contrato..." />
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar licencia médica..." />
         <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
     </div>
 
@@ -90,7 +92,7 @@ $error = "";
         $conexion = new PDO($dsn);
         $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $consulta = "SELECT * FROM contrato";
+        $consulta = "SELECT id_licencia, id_ficha, rut, emp_rut, lugar_reposo, centro_medico, f_otorgamiento, f_inicio_reposo, f_termino_reposo, diagnostico, medico FROM licencia_medica";
         $stmt = $conexion->prepare($consulta);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -103,31 +105,35 @@ $error = "";
     }
     ?>
 
-    <table id="contratoTable">
+    <table id="licenciamedicaTable">
         <tr>
-            <th>ID Contrato</th>
+            <th>ID Licencia</th>
+            <th>ID Ficha</th>
             <th>RUT</th>
-            <th>ID Beneficio</th>
-            <th>Fecha de Inicio</th>
-            <th>Fecha de Término</th>
-            <th>Hora de Entrada</th>
-            <th>Horas Semanales</th>
-            <th>Sueldo</th>
-            <th>Hora de Salida</th>
+            <th>RUT Empleado</th>
+            <th>Lugar de Reposo</th>
+            <th>Centro Médico</th>
+            <th>Fecha de Otorgamiento</th>
+            <th>Fecha de Inicio de Reposo</th>
+            <th>Fecha de Término de Reposo</th>
+            <th>Diagnóstico</th>
+            <th>Médico</th>
             <th>Acciones</th>
         </tr>
         <?php
         foreach ($resultado as $fila) {
             echo "<tr>";
-            echo "<td>" . $fila['id_contrato'] . "</td>";
+            echo "<td>" . $fila['id_licencia'] . "</td>";
+            echo "<td>" . $fila['id_ficha'] . "</td>";
             echo "<td>" . $fila['rut'] . "</td>";
-            echo "<td>" . $fila['id_beneficio'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['f_inicio'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['f_termino'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['hora_entrada'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['horas_semanales'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['sueldo'] . "</td>";
-            echo "<td contenteditable='false'>" . $fila['hora_salida'] . "</td>";
+            echo "<td>" . $fila['emp_rut'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['lugar_reposo'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['centro_medico'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['f_otorgamiento'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['f_inicio_reposo'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['f_termino_reposo'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['diagnostico'] . "</td>";
+            echo "<td contenteditable='false'>" . $fila['medico'] . "</td>";
             echo "<td class='acciones'><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
             echo "</tr>";
         }
@@ -136,15 +142,15 @@ $error = "";
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
     <script>
-        function filterContratos() {
+        function filterLicenciaMedica() {
             var input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("searchInput");
             filter = input.value.toUpperCase();
-            table = document.getElementById("contratoTable");
+            table = document.getElementById("licenciamedicaTable");
             tr = table.getElementsByTagName("tr");
 
             for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0]; // Columna del ID de Contrato
+                td = tr[i].getElementsByTagName("td")[0]; // Columna del ID de Licencia
                 if (td) {
                     txtValue = td.textContent || td.innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -158,24 +164,26 @@ $error = "";
 
         function enableEditing(row) {
             var cells = row.getElementsByTagName("td");
-            for (var i = 3; i < cells.length - 1; i++) {
+            for (var i = 4; i < cells.length - 1; i++) {
                 cells[i].setAttribute("contenteditable", "true");
             }
-            row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='updateContrato(this.parentElement.parentElement)'>Guardar</button>";
+            row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='updateLicenciaMedica(this.parentElement.parentElement)'>Guardar</button>";
         }
 
-        function updateContrato(row) {
+        function updateLicenciaMedica(row) {
             var cells = row.getElementsByTagName("td");
             var data = {
-                id_contrato: cells[0].innerText,
-                rut: cells[1].innerText,
-                id_beneficio: cells[2].innerText,
-                f_inicio: cells[3].innerText,
-                f_termino: cells[4].innerText,
-                hora_entrada: cells[5].innerText,
-                horas_semanales: cells[6].innerText,
-                sueldo: cells[7].innerText,
-                hora_salida: cells[8].innerText
+                id_licencia: cells[0].innerText,
+                id_ficha: cells[1].innerText,
+                rut: cells[2].innerText,
+                emp_rut: cells[3].innerText,
+                lugar_reposo: cells[4].innerText,
+                centro_medico: cells[5].innerText,
+                f_otorgamiento: cells[6].innerText,
+                f_inicio_reposo: cells[7].innerText,
+                f_termino_reposo: cells[8].innerText,
+                diagnostico: cells[9].innerText,
+                medico: cells[10].innerText
             };
 
             // Realizar la solicitud AJAX para actualizar los datos en la base de datos
@@ -193,18 +201,18 @@ $error = "";
                     });
 
                     // Restaurar la tabla a modo visualización
-                    for (var i = 3; i < cells.length - 1; i++) {
+                    for (var i = 4; i < cells.length - 1; i++) {
                         cells[i].setAttribute("contenteditable", "false");
                     }
                     row.getElementsByClassName("acciones")[0].innerHTML = "<button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button>";
                 }
             };
-            xhttp.open("POST", "actualizar_contrato.php", true); // Archivo PHP para actualizar los datos
+            xhttp.open("POST", "actualizar_licencia_medica.php", true); // Archivo PHP para actualizar los datos
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send("data=" + JSON.stringify(data));
         }
 
-        document.getElementById("searchInput").addEventListener("input", filterContratos);
+        document.getElementById("searchInput").addEventListener("input", filterLicenciaMedica);
     </script>
     <?php
     function getMenuURL($rol) {
@@ -223,4 +231,5 @@ $error = "";
     }
     ?>
 </body>
+
 </html>

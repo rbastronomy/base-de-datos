@@ -21,9 +21,10 @@ $error = "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Borrar Paciente</title>
+    <title>Borrar Asistencia</title>
     <link rel="stylesheet" href="eliminar_decoracion.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+
 </head>
 <style>
     .menu-btn {
@@ -38,13 +39,12 @@ $error = "";
             font-weight: bold;
         }
 </style>
-
 <body>
-    <h1>Borrar Paciente</h1>
+    <h1>Borrar Asistencia</h1>
 
     <div class="container">
         <div class="search-bar">
-            <input type="text" id="searchInput" class="search-input" placeholder="Buscar paciente..." />
+            <input type="text" id="searchInput" class="search-input" placeholder="Buscar asistencia..." />
             <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
 
         </div>
@@ -63,7 +63,7 @@ $error = "";
             $conexion = new PDO($dsn);
             $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $consulta = "SELECT * FROM paciente";
+            $consulta = "SELECT * FROM asistencia";
             $stmt = $conexion->prepare($consulta);
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -76,31 +76,29 @@ $error = "";
         }
         ?>
 
-        <table id="pacienteTable">
+        <table id="asistenciaTable">
             <tr>
+                <th>ID Asistencia</th>
                 <th>RUT</th>
-                <th>Celular</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Edad</th>
-                <th>Fecha de Nacimiento</th>
-                <th>Dirección</th>
-                <th>Género</th>
-                <th>Previsión</th>
+                <th>Fecha de Asistencia</th>
+                <th>Hora de Entrada</th>
+                <th>Hora de Salida</th>
+                <th>Estado de Asistencia</th>
+                <th>Horas Trabajadas</th>
+                <th>Razón de Ausencia</th>
                 <th>Acciones</th>
             </tr>
             <?php
             foreach ($resultado as $fila) {
                 echo "<tr>";
+                echo "<td>" . $fila['id_asistencia'] . "</td>";
                 echo "<td>" . $fila['rut'] . "</td>";
-                echo "<td>" . $fila['celular'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['nombre'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['correo'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['edad'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['f_nacimiento'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['direccion'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['genero'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['prevision'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['fecha_asistencia'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['hora_entrada'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['hora_salida'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['estado_asistencia'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['horas_trabajadas'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['razon_ausencia'] . "</td>";
                 echo "<td><button class='action-button' onclick='confirmDelete(this.parentElement.parentElement)'>Borrar</button></td>";
                 echo "</tr>";
             }
@@ -109,15 +107,15 @@ $error = "";
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
         <script>
-            function filterPacientes() {
+            function filterAsistencia() {
                 var input, filter, table, tr, td, i, txtValue;
                 input = document.getElementById("searchInput");
                 filter = input.value.toUpperCase();
-                table = document.getElementById("pacienteTable");
+                table = document.getElementById("asistenciaTable");
                 tr = table.getElementsByTagName("tr");
 
                 for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0]; // Columna del RUT
+                    td = tr[i].getElementsByTagName("td")[1]; // Columna del RUT
                     if (td) {
                         txtValue = td.textContent || td.innerText;
                         if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -141,16 +139,16 @@ $error = "";
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        deletePaciente(row);
+                        deleteAsistencia(row);
                     }
                 });
             }
 
-            function deletePaciente(row) {
+            function deleteAsistencia(row) {
                 var cells = row.getElementsByTagName("td");
-                var rut = cells[0].innerText;
+                var idAsistencia = cells[0].innerText;
 
-                // Realizar la solicitud AJAX para borrar el paciente de la base de datos
+                // Realizar la solicitud AJAX para borrar la asistencia de la base de datos
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
@@ -158,7 +156,7 @@ $error = "";
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
-                            title: 'Paciente borrado',
+                            title: 'Asistencia borrada',
                             text: this.responseText,
                             showConfirmButton: false,
                             timer: 2000 // Duración del mensaje en milisegundos (en este caso, 2 segundos)
@@ -168,11 +166,11 @@ $error = "";
                         row.remove();
                     }
                 };
-                xhttp.open("GET", "borrar_paciente.php?rut=" + rut, true); // Archivo PHP para borrar el paciente
+                xhttp.open("GET", "borrar_asistencia.php?id=" + idAsistencia, true); // Archivo PHP para borrar la asistencia
                 xhttp.send();
             }
 
-            document.getElementById("searchInput").addEventListener("input", filterPacientes);
+            document.getElementById("searchInput").addEventListener("input", filterAsistencia);
         </script>
     </div>
     <?php

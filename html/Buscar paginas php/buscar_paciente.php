@@ -1,3 +1,20 @@
+<?php
+$error = "";
+    $registrarSalidaHabilitado = false;
+    
+    session_start();
+    
+    // Obtener el RUT y rol de la sesión
+    $rut = isset($_SESSION['rut']) ? $_SESSION['rut'] : '';
+    $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
+    
+    // Verificar si se ha iniciado sesión con un rol válido
+    if (empty($rol) || !in_array($rol, ['Empleado Salud', 'Empleado Gestión', 'Empleado', 'Supervisor'])) {
+        // Redirigir a una página de error o mostrar un mensaje de error apropiado
+        echo "Error: Rol de usuario inválido.";
+        exit;
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,6 +55,17 @@
         .acciones button:hover {
             background-color: #0056b3;
         }
+        .menu-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -45,7 +73,7 @@
 
     <div class="search-bar">
         <input type="text" id="searchInput" class="search-input" placeholder="Buscar paciente..." />
-        <a href="menu_empleado_gestion.php" class="back-button">Regresar al Menú</a>
+        <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
     </div>
 
     <div id="message-container"></div>
@@ -62,7 +90,7 @@
         $conexion = new PDO($dsn);
         $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $consulta = "SELECT * FROM paciente";
+        $consulta = "SELECT p.rut, p.celular, p.nombre, p.correo, p.edad, p.f_nacimiento, p.direccion, p.genero, p.prevision, e.rut AS emp_rut FROM paciente p LEFT JOIN empleado e ON p.rut = e.rut";
         $stmt = $conexion->prepare($consulta);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -77,6 +105,7 @@
 
     <table id="pacienteTable">
         <tr>
+            
             <th>RUT</th>
             <th>Celular</th>
             <th>Nombre</th>
@@ -86,6 +115,7 @@
             <th>Dirección</th>
             <th>Género</th>
             <th>Previsión</th>
+            <th>Empleado</th>
             <th>Acciones</th>
         </tr>
         <?php
@@ -100,6 +130,7 @@
             echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['direccion'] . "</td>";
             echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['genero'] . "</td>";
             echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . $fila['prevision'] . "</td>";
+            echo "<td contenteditable='false' oninput='enableSaveButton(this.parentElement)'>" . ($fila['emp_rut'] ? 'Empleado' : 'Paciente') . "</td>";
             echo "<td class='acciones'><button onclick='enableEditing(this.parentElement.parentElement)'>Modificar</button></td>";
             echo "</tr>";
         }
@@ -184,5 +215,21 @@
 
         document.getElementById("searchInput").addEventListener("input", filterPacientes);
     </script>
+    <?php
+    function getMenuURL($rol) {
+        switch ($rol) {
+            case 'Empleado Salud':
+                return 'menu_empleado_salud.php';
+            case 'Empleado Gestión':
+                return 'menu_empleado_gestion.php';
+            case 'Empleado':
+                return 'menu_supervisor.php';
+            case 'Supervisor':
+                return 'menu_supervisor.php';
+            default:
+                return 'menu.php';
+        }
+    }
+    ?>
 </body>
 </html>

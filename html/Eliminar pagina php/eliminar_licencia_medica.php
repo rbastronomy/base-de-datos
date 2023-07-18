@@ -21,7 +21,7 @@ $error = "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Borrar Paciente</title>
+    <title>Borrar Licencia Médica</title>
     <link rel="stylesheet" href="eliminar_decoracion.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
 </head>
@@ -40,11 +40,11 @@ $error = "";
 </style>
 
 <body>
-    <h1>Borrar Paciente</h1>
+    <h1>Borrar Licencia Médica</h1>
 
     <div class="container">
         <div class="search-bar">
-            <input type="text" id="searchInput" class="search-input" placeholder="Buscar paciente..." />
+            <input type="text" id="searchInput" class="search-input" placeholder="Buscar licencia médica..." />
             <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
 
         </div>
@@ -63,7 +63,7 @@ $error = "";
             $conexion = new PDO($dsn);
             $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $consulta = "SELECT * FROM paciente";
+            $consulta = "SELECT id_licencia, id_ficha, lugar_reposo, centro_medico, f_otorgamiento, f_inicio_reposo, f_termino_reposo, diagnostico, medico FROM licencia_medica";
             $stmt = $conexion->prepare($consulta);
             $stmt->execute();
             $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -76,31 +76,31 @@ $error = "";
         }
         ?>
 
-        <table id="pacienteTable">
+        <table id="licenciamedicaTable">
             <tr>
-                <th>RUT</th>
-                <th>Celular</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Edad</th>
-                <th>Fecha de Nacimiento</th>
-                <th>Dirección</th>
-                <th>Género</th>
-                <th>Previsión</th>
+                <th>ID Licencia</th>
+                <th>ID Ficha</th>
+                <th>Lugar Reposo</th>
+                <th>Centro Médico</th>
+                <th>F. Otorgamiento</th>
+                <th>F. Inicio Reposo</th>
+                <th>F. Término Reposo</th>
+                <th>Diagnóstico</th>
+                <th>Médico</th>
                 <th>Acciones</th>
             </tr>
             <?php
             foreach ($resultado as $fila) {
                 echo "<tr>";
-                echo "<td>" . $fila['rut'] . "</td>";
-                echo "<td>" . $fila['celular'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['nombre'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['correo'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['edad'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['f_nacimiento'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['direccion'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['genero'] . "</td>";
-                echo "<td contenteditable='false'>" . $fila['prevision'] . "</td>";
+                echo "<td>" . $fila['id_licencia'] . "</td>";
+                echo "<td>" . $fila['id_ficha'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['lugar_reposo'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['centro_medico'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['f_otorgamiento'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['f_inicio_reposo'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['f_termino_reposo'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['diagnostico'] . "</td>";
+                echo "<td contenteditable='false'>" . $fila['medico'] . "</td>";
                 echo "<td><button class='action-button' onclick='confirmDelete(this.parentElement.parentElement)'>Borrar</button></td>";
                 echo "</tr>";
             }
@@ -109,15 +109,15 @@ $error = "";
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
         <script>
-            function filterPacientes() {
+            function filterLicenciaMedica() {
                 var input, filter, table, tr, td, i, txtValue;
                 input = document.getElementById("searchInput");
                 filter = input.value.toUpperCase();
-                table = document.getElementById("pacienteTable");
+                table = document.getElementById("licenciamedicaTable");
                 tr = table.getElementsByTagName("tr");
 
                 for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0]; // Columna del RUT
+                    td = tr[i].getElementsByTagName("td")[0]; // Columna del ID de Licencia
                     if (td) {
                         txtValue = td.textContent || td.innerText;
                         if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -141,16 +141,16 @@ $error = "";
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        deletePaciente(row);
+                        deleteLicenciaMedica(row);
                     }
                 });
             }
 
-            function deletePaciente(row) {
+            function deleteLicenciaMedica(row) {
                 var cells = row.getElementsByTagName("td");
-                var rut = cells[0].innerText;
+                var id_licencia = cells[0].innerText;
 
-                // Realizar la solicitud AJAX para borrar el paciente de la base de datos
+                // Realizar la solicitud AJAX para borrar la licencia médica de la base de datos
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
@@ -158,7 +158,7 @@ $error = "";
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
-                            title: 'Paciente borrado',
+                            title: 'Licencia médica borrada',
                             text: this.responseText,
                             showConfirmButton: false,
                             timer: 2000 // Duración del mensaje en milisegundos (en este caso, 2 segundos)
@@ -168,11 +168,11 @@ $error = "";
                         row.remove();
                     }
                 };
-                xhttp.open("GET", "borrar_paciente.php?rut=" + rut, true); // Archivo PHP para borrar el paciente
+                xhttp.open("GET", "borrar_licencia_medica.php?id_licencia=" + id_licencia, true); // Archivo PHP para borrar la licencia médica
                 xhttp.send();
             }
 
-            document.getElementById("searchInput").addEventListener("input", filterPacientes);
+            document.getElementById("searchInput").addEventListener("input", filterLicenciaMedica);
         </script>
     </div>
     <?php

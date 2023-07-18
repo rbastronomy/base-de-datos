@@ -1,5 +1,22 @@
 <?php
 $error = "";
+    $registrarSalidaHabilitado = false;
+    
+    session_start();
+    
+    // Obtener el RUT y rol de la sesión
+    $rut = isset($_SESSION['rut']) ? $_SESSION['rut'] : '';
+    $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
+    
+    // Verificar si se ha iniciado sesión con un rol válido
+    if (empty($rol) || !in_array($rol, ['Empleado Salud', 'Empleado Gestión', 'Empleado', 'Supervisor'])) {
+        // Redirigir a una página de error o mostrar un mensaje de error apropiado
+        echo "Error: Rol de usuario inválido.";
+        exit;
+    }
+?>
+<?php
+$error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $host = 'magallanes.inf.unap.cl';
@@ -18,10 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $celular = $_POST['celular'];
         $nombre = $_POST['nombre'];
         $correo = $_POST['correo'];
-        $edad = $_POST['edad'];
         $f_nacimiento = $_POST['f_nacimiento'];
         $direccion = $_POST['direccion'];
         $genero = $_POST['genero'];
+
+        // Calcular la edad a partir de la fecha de nacimiento
+        $fecha_nacimiento = new DateTime($f_nacimiento);
+        $hoy = new DateTime();
+        $edad = $hoy->diff($fecha_nacimiento)->y;
 
         // Preparar la consulta SQL para insertar en la tabla persona
         $consulta_persona = "INSERT INTO persona (rut, celular, nombre, correo, edad, f_nacimiento, direccion, genero) 
@@ -154,7 +175,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Crear Empleado</title>
     <link rel="stylesheet" href="crear_decoracion.css">
 </head>
-
+<style>
+    .menu-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+</style>
 <body>
     <div class="container">
         <h1>Crear Empleado</h1>
@@ -162,19 +195,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2>Datos Personales</h2>
         <form action="crear_empleado.php" method="POST">
             <label for="rut">RUT:</label>
-            <input type="text" id="rut" name="rut" pattern="[0-9]{7,8}[0-9]" maxlength="12" required title="El RUT debe contener solo números y el dígito verificador puede ser un número o la letra K." oninput="formatRUT(this)">
+            <input type="text" id="rut" name="rut" required>
 
             <label for="celular">Celular:</label>
-            <input type="text" id="celular" name="celular" pattern="[0-9]+" required title="Solo se permiten números en el campo del celular.">
+            <input type="text" id="celular" name="celular" required>
 
             <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" pattern="[A-Za-z]+" required title="Solo se permiten letras en el campo del nombre.">
+            <input type="text" id="nombre" name="nombre" required>
 
             <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo" required pattern=".+@.+" title="El campo del correo debe contener una dirección de correo válida con el símbolo @.">
-
-            <label for="edad">Edad:</label>
-            <input type="number" id="edad" name="edad" required>
+            <input type="email" id="correo" name="correo" required>
 
             <label for="f_nacimiento">Fecha de Nacimiento:</label>
             <input type="date" id="f_nacimiento" name="f_nacimiento" required>
@@ -195,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" id="cargo" name="cargo" required>
 
             <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" name="contrasena" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$" required title="La contraseña debe tener al menos un símbolo, una mayúscula, una minúscula y un número.">
+            <input type="password" id="contrasena" name="contrasena" required>
 
             <h2>Tipo de Empleado</h2>
 
@@ -222,7 +252,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="submit" value="Crear Empleado">
         </form>
 
-        <button id="menu-button" onclick="window.location.href='menu_empleado_gestion.php'">Menú</button>
+        <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
+
 
         <?php
         if (isset($_GET['error'])) {
@@ -234,15 +265,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        function formatRUT(input) {
-            // Remover guiones y puntos
-            var rut = input.value.replace(/[-.]/g, '');
-            // Volver a formatear el RUT con puntos y guión
-            var formattedRUT = rut.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '-' + rut.slice(-1);
-            // Actualizar el valor del campo de entrada
-            input.value = formattedRUT;
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('f_nacimiento').addEventListener('change', function() {
+                var fechaNacimiento = new Date(this.value);
+                var hoy = new Date();
+                var edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+                var mes = hoy.getMonth() - fechaNacimiento.getMonth();
+                if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+                    edad--;
+                }
+                document.getElementById('edad').value = edad;
+            });
+
+            document.getElementById('crear_salud').addEventListener('change', function() {
+                var opcionesSalud = document.getElementById('opciones_salud');
+                opcionesSalud.style.display = this.checked ? 'block' : 'none';
+            });
+
+            document.getElementById('crear_gestion').addEventListener('change', function() {
+                var opcionesGestion = document.getElementById('opciones_gestion');
+                opcionesGestion.style.display = this.checked ? 'block' : 'none';
+            });
+        });
     </script>
+    <?php
+    function getMenuURL($rol) {
+        switch ($rol) {
+            case 'Empleado Salud':
+                return 'menu_empleado_salud.php';
+            case 'Empleado Gestión':
+                return 'menu_empleado_gestion.php';
+            case 'Empleado':
+                return 'menu_supervisor.php';
+            case 'Supervisor':
+                return 'menu_supervisor.php';
+            default:
+                return 'menu.php';
+        }
+    }
+    ?>
 </body>
 
 </html>

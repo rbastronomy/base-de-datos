@@ -74,28 +74,58 @@ if (!isset($_SESSION['rut'])) {
         <div class="menu">
             <p class="menu-title">Buscar</p>
             <nav class="left-menu">
+                <a href="buscar_empleado.php">Buscar Empleado</a>
                 <a href="buscar_agenda.php">Buscar Agenda</a>
-                <a href="buscar_licencia_medica_gestion.php">Buscar Licencia Medica</a>
+                <a href="buscar_contrato.php">Buscar Contrato</a>
+                <a href="buscar_paciente.php">Buscar Paciente</a>
+                <a href="buscar_beneficio.php">Buscar Beneficio</a>
             </nav>
         </div>
         <div class="menu">
             <p class="menu-title">Crear</p>
             <nav class="middle-menu">
+                <a href="crear_empleado.php">Crear Empleado</a>
                 <a href="crear_agenda.php">Crear Agenda</a>
-                <a href="crear_licencia_medica_gestion.php">Crear Licencia Medica</a>
+                <a href="crear_contrato.php">Crear Contrato</a>
+                <a href="crear_paciente.php">Crear Paciente</a>
+                <a href="crear_beneficio.php">Crear Beneficio</a>
             </nav>
         </div>
         <div class="menu">
             <p class="menu-title">Eliminar</p>
             <nav class="right-menu">
+                <a href="eliminar_empleado.php">Borrar Empleado</a>
                 <a href="eliminar_agenda.php">Borrar Agenda</a>
-                <a href="eliminar_licencia_medica_gestion.php">Borrar Licencia Medica</a>
+                <a href="eliminar_contrato.php">Borrar Contrato</a>
+                <a href="eliminar_paciente.php">Borrar Paciente</a>
+                <a href="eliminar_beneficio.php">Borrar Beneficio</a>
+            </nav>
+        </div>
+        <div class="menu">
+            <p class="menu-title">Medicina</p>
+            <nav class="right-menu">
+                <a href="crear_ficha_clinica.php">Crear Ficha Clínica</a>
+                <a href="buscar_ficha_clinica.php">Buscar Ficha Clínica</a>
+                <a href="eliminar_ficha_clinica.php">Eliminar Ficha Clínica</a>
+                <div class="sub-menu">
+                    <a href="crear_licencia_medica.php">Crear Licencia Médica</a>
+                    <a href="buscar_licencia_medica.php">Buscar Licencia Médica</a>
+                    <a href="eliminar_licencia_medica.php">Eliminar Licencia Médica</a>
+                </div>
+                <div class="sub-menu">
+                <a href="crear_licencia_medica_gestion.php">Crear Licencia Medica Gestion</a>
+                <a href="buscar_licencia_medica_gestion.php">Buscar Licencia Medica Gestion</a>
+                <a href="eliminar_licencia_medica_gestion.php">Eliminar Licencia Medica Gestion</a>
+                </div>
             </nav>
         </div>
         <div class="menu">
             <p class="menu-title">Asistencia</p>
-            <nav class="right-menu">
+            <nav class="up-menu">
                 <a href="registrar_asistencia.php">Registrar Asistencia</a>
+                <a href="buscar_asistencia.php">Buscar Asistencia</a>
+                <a href="eliminar_asistencia.php">Borrar Asistencia</a>
+                <a href="reportes.php">Reportes Asistencia</a>
             </nav>
         </div>
     </div>

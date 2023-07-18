@@ -1,5 +1,23 @@
 <?php
 $error = "";
+$registrarSalidaHabilitado = false;
+
+session_start();
+
+// Obtener el RUT y rol de la sesión
+$rut = isset($_SESSION['rut']) ? $_SESSION['rut'] : '';
+$rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
+
+// Verificar si se ha iniciado sesión con un rol válido
+if (empty($rol) || !in_array($rol, ['Empleado Salud', 'Empleado Gestión', 'Empleado', 'Supervisor'])) {
+    // Redirigir a una página de error o mostrar un mensaje de error apropiado
+    echo "Error: Rol de usuario inválido.";
+    exit;
+}
+?>
+
+<?php
+$error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -14,25 +32,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conexion = new PDO($dsn);
         $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $id_contrato = $_POST['id_contrato'];
         $rut = $_POST['rut'];
         $f_inicio = $_POST['f_inicio'];
         $f_termino = $_POST['f_termino'];
         $hora_entrada = $_POST['hora_entrada'];
-        $horas_semanales = $_POST['horas_semanales'];
         $sueldo = $_POST['sueldo'];
         $hora_salida = $_POST['hora_salida'];
 
-        $sql = "INSERT INTO contrato (id_contrato, rut, f_inicio, f_termino, hora_entrada, horas_semanales, sueldo, hora_salida)
-                VALUES (:id_contrato, :rut, :f_inicio, :f_termino, :hora_entrada, :horas_semanales, :sueldo, :hora_salida)";
+        $sql = "INSERT INTO contrato (rut, f_inicio, f_termino, hora_entrada, sueldo, hora_salida)
+                VALUES (:rut, :f_inicio, :f_termino, :hora_entrada, :sueldo, :hora_salida)";
 
         $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':id_contrato', $id_contrato);
         $stmt->bindParam(':rut', $rut);
         $stmt->bindParam(':f_inicio', $f_inicio);
         $stmt->bindParam(':f_termino', $f_termino);
         $stmt->bindParam(':hora_entrada', $hora_entrada);
-        $stmt->bindParam(':horas_semanales', $horas_semanales);
         $stmt->bindParam(':sueldo', $sueldo);
         $stmt->bindParam(':hora_salida', $hora_salida);
 
@@ -76,6 +90,19 @@ try {
     <title>Crear Contrato</title>
     <link rel="stylesheet" href="crear_decoracion.css">
 </head>
+<style>
+    .menu-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+</style>
 
 <body>
     <div class="container">
@@ -83,11 +110,6 @@ try {
 
         <h2>Datos del Contrato</h2>
         <form action="crear_contrato.php" method="POST" class="contrato-form">
-            <div class="form-row">
-                <label for="id_contrato">ID de Contrato:</label>
-                <input type="text" id="id_contrato" name="id_contrato" required>
-            </div>
-
             <div class="form-row">
                 <label for="rut">RUT - Nombre de Empleado:</label>
                 <select id="rut" name="rut" required>
@@ -115,11 +137,6 @@ try {
             </div>
 
             <div class="form-row">
-                <label for="horas_semanales">Horas Semanales:</label>
-                <input type="text" id="horas_semanales" name="horas_semanales" required>
-            </div>
-
-            <div class="form-row">
                 <label for="sueldo">Sueldo:</label>
                 <input type="number" id="sueldo" name="sueldo" required>
             </div>
@@ -134,7 +151,8 @@ try {
             </div>
         </form>
 
-        <button id="menu-button" onclick="window.location.href='menu_empleado_gestion.php'">Menú</button>
+        <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
+
 
         <?php
         if (isset($_GET['error'])) {
@@ -144,6 +162,23 @@ try {
         }
         ?>
     </div>
+    <?php
+    function getMenuURL($rol)
+    {
+        switch ($rol) {
+            case 'Empleado Salud':
+                return 'menu_empleado_salud.php';
+            case 'Empleado Gestión':
+                return 'menu_empleado_gestion.php';
+            case 'Empleado':
+                return 'menu_supervisor.php';
+            case 'Supervisor':
+                return 'menu_supervisor.php';
+            default:
+                return 'menu.php';
+        }
+    }
+    ?>
 </body>
 
 </html>

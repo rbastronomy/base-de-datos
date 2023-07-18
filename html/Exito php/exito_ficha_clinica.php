@@ -39,9 +39,9 @@ $error = "";
 </style>
 <body>
     <div class="container">
-        <h1>Éxito al crear el Paciente</h1>
-        <p>El Paciente se ha creado correctamente.</p>
-        <a href="crear_paciente.php" class="back-button back-to-creation-button">Volver a la creación de Paciente</a>
+        <h1>Éxito al crear la Ficha Clinica</h1>
+        <p>La Ficha Clinica se ha creado correctamente.</p>
+        <a href="crear_ficha_clinica.php" class="back-button back-to-creation-button">Volver a la creación de Ficha Clinica</a>
         <a class="menu-btn" href="<?php echo getMenuURL($rol); ?>">Regresar al Menú</a>
 
     </div>
